@@ -1,0 +1,5 @@
+# Project-local native Codex agents live in .codex/agents/*.toml.
+# Verify actual subagent dispatch in the installed Codex CLI; no fake worker fallback.
+# The feature flag may vary across Codex versions; unsupported hosts must report BLOCKED.
+[features]
+multi_agent = true

@@ -1,0 +1,12 @@
+node_modules/
+*.tgz
+__pycache__/
+.pytest_cache/
+*.py[cod]
+.env
+.env.*
+!.env.example
+.DS_Store
+*.log
+coverage/
+.agentflow-test/

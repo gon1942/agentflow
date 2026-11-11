@@ -1,0 +1,16 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "default_agent": "coordinator",
+  "permission": {
+    "read": "allow",
+    "skill": "allow",
+    "task": "allow",
+    "bash": {
+      "*": "allow",
+      "git commit *": "ask",
+      "git push *": "ask",
+      "git reset --hard *": "deny",
+      "rm -rf *": "ask"
+    }
+  }
+}

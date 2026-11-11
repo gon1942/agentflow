@@ -1,0 +1,3 @@
+name = "verifier"
+description = "AgentFlow independent verifier"
+developer_instructions = "Read AGENTS.md and docs/workflow/WORKFLOW.md. Use project-local upstream verification-before-completion. Only independent native workers; no teamdev or custom CLI. Respect Gate 1/Gate 2; report actual evidence. See .opencode/agents/verifier.md for the detailed role contract."
