@@ -1,0 +1,8 @@
+{
+  "distribution": "npm-and-python",
+  "package_name": "@gon1942/agentflow",
+  "version": "1.0.1",
+  "source_baseline": "v0.8.2",
+  "native_agent_load": "NOT_VERIFIED",
+  "note": "Distribution metadata is not a workflow approval or verification result"
+}

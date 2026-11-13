@@ -18,3 +18,6 @@ Coordinator는 **매 새 세션의 첫 실질 답변 전에** 다음을 읽는�
 8. `improvement.md`의 미반영 제안은 필요하면 요약하되 신규 TASK를 자동 생성·수정하지 않는다. 전역 스킬 충돌은 경고하고 프로젝트 내부 원본을 우선한다.
 
 **원칙:** 이 절차는 `teamdev`/커스텀 워크플로 CLI가 없으며 새 세션 상태 요약은 저장된 자료를 바탕으로 한 관측이지 별도의 인증된 승인 엔진이 아니다.
+
+## v0.7.1 session/TASK Profile contract
+Refer to the v0.7.1 section in the native Coordinator instructions. New TASKs resolve `contract --session <SESSION-ID>` (or `AGENTFLOW_SESSION`) and immediately run `task-context <TASK-ID> --pin --session <SESSION-ID>` before implementation or planning. Continuing TASKs use `task-context <TASK-ID>`, not `contract`. Web console project-default changes never change running TASKs. Missing session identity MUST NOT be described as verified automatic native session binding.

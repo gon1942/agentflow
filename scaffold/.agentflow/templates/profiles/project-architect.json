@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "id": "project-architect",
+  "name": "Project Architect · 프로젝트 설계 전문가",
+  "description": "프로젝트 요구사항·아키텍처·ADR를 작성하고 검증 및 독립 리뷰한다. IMPLEMENT 단계는 문서 DESIGN 작업으로 표시한다.",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "project-architect",
+  "policy": "protected-development",
+  "built_in": false,
+  "preinstalled": true,
+  "approval_gates": {
+    "GATE1": true,
+    "GATE2": true
+  },
+  "stop_after_stage": "COMPLETE",
+  "enabled_stages": [
+    "ANALYZE",
+    "PLAN",
+    "GATE1",
+    "IMPLEMENT",
+    "VERIFY",
+    "REVIEW",
+    "GATE2",
+    "COMPLETE"
+  ],
+  "conditional_stages": {
+    "BUG_FAIL": true,
+    "REVIEW_FIX": true
+  },
+  "stage_labels": {
+    "IMPLEMENT": "DESIGN"
+  }
+}

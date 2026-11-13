@@ -1,7 +1,7 @@
 from pathlib import Path
 import json, hashlib, importlib.util, io, tarfile, os, tempfile, subprocess, sys, tomllib, unittest
 from unittest.mock import patch
-from test_install import ROOT, installer, make_fixture
+from test_install import ROOT, installer, make_fixture, make_arch_fixture
 
 # Load installer-only project-provisioning code without requiring global installation.
 tools = installer.tool_provision
@@ -111,16 +111,16 @@ class PolicyAndToolsTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp,patch.object(installer,'EXPECTED_SKILLS',hashes),patch.object(installer,'EXPECTED_HELPERS',helper_hashes):
             root=Path(tmp)/'proj';zipfile=Path(tmp)/'upstream.zip';zipfile.write_bytes(blob)
             import contextlib
-            with patch.object(tools,'provision',return_value={'status':'BLOCKED','results':{'rtk':{'status':'BLOCKED'}}}) as mock_provision,contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
+            with patch.object(installer.architect,'load_package',return_value=make_arch_fixture()),patch.object(tools,'provision',return_value={'status':'BLOCKED','results':{'rtk':{'status':'BLOCKED'}}}) as mock_provision,contextlib.redirect_stdout(io.StringIO()),contextlib.redirect_stderr(io.StringIO()):
                 code=installer.main([str(root),'--upstream-zip',str(zipfile)])
             self.assertEqual(code,2)
             mock_provision.assert_called_once()
             self.assertTrue((root/'.ai-dev/external-skills.lock.json').is_file())
-            with contextlib.redirect_stdout(io.StringIO()):
+            with patch.object(installer.architect,'load_package',return_value=make_arch_fixture()),contextlib.redirect_stdout(io.StringIO()):
                 self.assertEqual(installer.main([str(root),'--upstream-zip',str(zipfile),'--skip-tools']),0)
 
     def test_session_detects_global_skill_shadowing_without_writing_global(self):
-        src=(SCAFFOLD/'.opencode/plugins/session-status.js')
+        src=(SCAFFOLD/'.opencode/lib/session-status.js')
         with tempfile.TemporaryDirectory() as tmp:
             base=Path(tmp);project=base/'project';home=base/'home'
             loc=project/'.opencode/skills/brainstorming/SKILL.md';loc.parent.mkdir(parents=True);loc.write_text('original')

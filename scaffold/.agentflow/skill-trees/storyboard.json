@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "id": "storyboard",
+  "stages": [
+    {
+      "id": "SESSION",
+      "agent": "coordinator",
+      "skills": []
+    },
+    {
+      "id": "ANALYZE",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "brainstorming",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "REQUIREMENTS",
+        "EXISTING_SCREEN_ANALYSIS",
+        "MENU_ANALYSIS"
+      ]
+    },
+    {
+      "id": "PLAN",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "writing-plans",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "STORYBOARD_SCOPE",
+        "SCREEN_INVENTORY"
+      ]
+    },
+    {
+      "id": "GATE1",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "IMPLEMENT",
+      "agent": "implementer",
+      "skills": [],
+      "activities": [
+        "UI_DESIGN",
+        "INTERACTION_FLOW",
+        "STORYBOARD",
+        "SCREEN_SPEC"
+      ]
+    },
+    {
+      "id": "BUG_FAIL",
+      "agent": "current_worker",
+      "skills": []
+    },
+    {
+      "id": "VERIFY",
+      "agent": "verifier",
+      "skills": [
+        {
+          "name": "verification-before-completion",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "SCREEN_COVERAGE_CHECK",
+        "CONSISTENCY_CHECK",
+        "VALIDATION"
+      ]
+    },
+    {
+      "id": "REVIEW",
+      "agent": "reviewer",
+      "skills": [],
+      "activities": [
+        "DESIGN_REVIEW",
+        "TRACEABILITY_REVIEW"
+      ]
+    },
+    {
+      "id": "REVIEW_FIX",
+      "agent": "implementer",
+      "skills": []
+    },
+    {
+      "id": "GATE2",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "COMPLETE",
+      "agent": "coordinator",
+      "skills": []
+    }
+  ]
+}

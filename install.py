@@ -17,6 +17,7 @@ import sys
 import urllib.request
 import zipfile
 import importlib.util
+import architect_sources as architect
 # Load the installer-only provisioning module from this release directory (not from PYTHONPATH/global).
 _TOOL_MODULE = Path(__file__).resolve().with_name('tool_provision.py')
 _TOOL_SPEC = importlib.util.spec_from_file_location('agentflow_tool_provision_local', _TOOL_MODULE)
@@ -120,12 +121,17 @@ def extract_skills(blob: bytes) -> dict[str, bytes]:
 def _scaffold_files(base: Path) -> dict[str, bytes]:
     out = {}
     for path in (base / 'scaffold').rglob('*'):
-        if path.is_file():
-            out[path.relative_to(base / 'scaffold').as_posix()] = path.read_bytes()
+        if path.is_file() and not any(part in ('__pycache__','.pytest_cache') for part in path.parts) and path.suffix not in ('.pyc','.pyo'):
+            rel = path.relative_to(base / 'scaffold').as_posix()
+            # npm always excludes .gitignore from tarballs, even when files[] whitelists it.
+            # Preserve the project-local ignore policy via a distributable template.
+            if rel == '.ai-dev/gitignore-template.txt':
+                rel = '.ai-dev/.gitignore'
+            out[rel] = path.read_bytes()
     return out
 
 
-def build_install_map(scaffold: Path, skill_files: dict[str, bytes]) -> dict[str, bytes]:
+def build_install_map(scaffold: Path, skill_files: dict[str, bytes], architect_package: dict) -> dict[str, bytes]:
     result = _scaffold_files(scaffold)
     # Retain the exact upstream MIT license notice in every installed project.
     license_bytes = result.get(ORIGINAL_LICENSE_REL)
@@ -141,10 +147,15 @@ def build_install_map(scaffold: Path, skill_files: dict[str, bytes]) -> dict[str
         'installed_files_sha256': {key: hashlib.sha256(data).hexdigest() for key, data in sorted(skill_files.items())},
         'note': 'Files present/hashed, NOT proof of native agent skill loading',
     }
+    manifest['managed_skills'] = architect.managed_entries(architect_package)
+    manifest['project_architect_sources'] = architect_package['sources']
     result['.ai-dev/external-skills.lock.json'] = (json.dumps(manifest, indent=2, ensure_ascii=False) + '\n').encode()
     for root in SKILL_ROOTS:
         for name, content in skill_files.items():
             result[root + '/' + name] = content
+        for name, content in architect_package['files'].items():
+            result[root + '/' + name] = content
+    result.update(architect_package['licenses'])
     return result
 
 
@@ -160,8 +171,10 @@ def _check_destination(root: Path, rel: str, contents: bytes) -> str | None:
     return None
 
 
-def install(root: Path, scaffold: Path, upstream_zip: bytes) -> dict:
-    files = build_install_map(scaffold, extract_skills(upstream_zip))
+def install(root: Path, scaffold: Path, upstream_zip: bytes, *, architect_package: dict | None = None) -> dict:
+    if architect_package is None:
+        architect_package = architect.load_package()
+    files = build_install_map(scaffold, extract_skills(upstream_zip), architect_package)
     root = root.expanduser().resolve()
     if root.exists() and not root.is_dir():
         raise ValueError(f'Not a directory: {root}')
@@ -169,27 +182,42 @@ def install(root: Path, scaffold: Path, upstream_zip: bytes) -> dict:
     conflicts = [x for x in conflicts if x]
     if conflicts:
         raise ValueError('Refusing to overwrite existing project files:\n' + '\n'.join(conflicts[:15]))
+    did_exist = root.exists()
     root.mkdir(parents=True, exist_ok=True)
+    newly_written=[]
     wrote = 0
-    for rel, content in sorted(files.items()):
-        path = root / rel
-        if path.exists():
-            continue
-        path.parent.mkdir(parents=True, exist_ok=True)
-        tmp = path.with_name('.' + path.name + '.install-tmp')
-        try:
-            with tmp.open('xb') as fh:
-                fh.write(content)
-                fh.flush()
-                os.fsync(fh.fileno())
-            os.replace(tmp, path)
-            # Upstream executable shell helpers must remain executable after copying.
-            if rel.endswith('.sh') and '/skills/' in rel:
-                path.chmod(0o755)
-            wrote += 1
-        finally:
-            tmp.unlink(missing_ok=True)
-    return {'project': str(root), 'skills': len(EXPECTED_SKILLS), 'runtimes': len(SKILL_ROOTS), 'written_files': wrote,
+    try:
+        for rel, content in sorted(files.items()):
+            path = root / rel
+            if path.exists():
+                continue
+            path.parent.mkdir(parents=True, exist_ok=True)
+            tmp = path.with_name('.' + path.name + '.install-tmp')
+            try:
+                with tmp.open('xb') as fh:
+                    fh.write(content)
+                    fh.flush()
+                    os.fsync(fh.fileno())
+                os.replace(tmp, path)
+                newly_written.append(path)
+                # Source helper executable flags apply only to project-local script files.
+                if rel.endswith('.sh') and '/skills/' in rel:
+                    path.chmod(0o755)
+                wrote += 1
+            finally:
+                tmp.unlink(missing_ok=True)
+    except BaseException:
+        # Preserve all preexisting content. Roll back only newly-created files.
+        for path in reversed(newly_written):
+            path.unlink(missing_ok=True)
+        if not did_exist:
+            for folder in sorted((x for x in root.rglob('*') if x.is_dir()),key=lambda x:len(x.parts),reverse=True):
+                try:folder.rmdir()
+                except OSError:pass
+            try:root.rmdir()
+            except OSError:pass
+        raise
+    return {'project': str(root), 'skills': len(EXPECTED_SKILLS) + len(architect.SKILLS), 'architect_skills': len(architect.SKILLS), 'runtimes': len(SKILL_ROOTS), 'written_files': wrote,
             'tool_scope': 'PROJECT_ONLY', 'workflow_cli': 'NONE', 'native_skill_load': 'NOT_VERIFIED',
             'startup': 'New session: read docs/tasks/active/*, completed/* and legacy progress.md then show task summary.'}
 
@@ -198,10 +226,13 @@ def main(argv=None) -> int:
     ap = argparse.ArgumentParser(description='One-time AgentFlow Native Skills + project tool installer (NO runtime CLI)')
     ap.add_argument('project', help='Destination project path. Existing conflicting files are never overwritten.')
     ap.add_argument('--upstream-zip', help='Local official Superpowers ZIP at the pinned commit; useful for offline installs')
+    ap.add_argument('--architect-archive-dir', help='Offline directory with 3 pinned GitHub source ZIPs: MUSUBI-<commit>.zip, skills-<commit>.zip, ECC-<commit>.zip')
     ap.add_argument('--skip-tools', action='store_true', help='ONLY for offline tests. Skips required RTK/CRG provisioning; not production READY.')
     ap.add_argument('--no-browser', action='store_true', help='Skip optional browser provisioning when system Chrome is unavailable')
     ns = ap.parse_args(argv)
     try:
+        # Fail before any project writes if one of the 8 architect sources is unavailable.
+        architect_package = architect.load_package(Path(ns.architect_archive_dir) if ns.architect_archive_dir else None)
         if ns.upstream_zip:
             blob = Path(ns.upstream_zip).read_bytes()
         else:
@@ -209,7 +240,7 @@ def main(argv=None) -> int:
             request = urllib.request.Request(ARCHIVE_URL, headers={'User-Agent':'AgentFlow-Native-Skills-Installer/0.2'})
             with urllib.request.urlopen(request, timeout=40) as response:
                 blob = response.read(MAX_ZIP_BYTES + 1)
-        output = install(Path(ns.project), Path(__file__).resolve().parent, blob)
+        output = install(Path(ns.project), Path(__file__).resolve().parent, blob, architect_package=architect_package)
         if ns.skip_tools:
             output['tool_provision'] = {'status':'SKIPPED','reason':'EXPLICIT_SKIP_TOOLS'}
         else:

@@ -1,4 +1,5 @@
 """Offline integration test: real project copy and real Node app tests; native workers/approvals simulated."""
+from test_install import make_arch_fixture
 from pathlib import Path
 import hashlib
 import json
@@ -52,7 +53,7 @@ class WorkflowArtifactE2ETests(unittest.TestCase):
         blob, skill_hashes, helper_hashes, _ = make_fixture()
         with tempfile.TemporaryDirectory() as tmp,patch.object(installer,'EXPECTED_SKILLS',skill_hashes),patch.object(installer,'EXPECTED_HELPERS',helper_hashes):
             root=Path(tmp)/'new-project'
-            installer.install(root,ROOT,blob)
+            installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
             task=root/'docs/tasks/active/AUTH-001-user-login-page'
             task.mkdir(parents=True)
             for name in ['progress.md','spec.md','plan.md','verification.md','review.md','approvals.md']:
@@ -86,7 +87,7 @@ class WorkflowArtifactE2ETests(unittest.TestCase):
             self.assertFalse(task.exists())
             self.assertTrue((completed/'plan.md').is_file())
             # A fresh session sees the archived TASK, not an empty active state.
-            js=(f'import {{readProjectStatus}} from {json.dumps((root/".opencode/plugins/session-status.js").as_uri())};'
+            js=(f'import {{readProjectStatus}} from {json.dumps((root/".opencode/lib/session-status.js").as_uri())};'
                 f'const v=await readProjectStatus({json.dumps(str(root))});'
                 f'if(!v.summary.includes("완료 1"))throw new Error(v.summary);console.log(v.summary);')
             result=subprocess.run(['node','--input-type=module','-e',js],capture_output=True,text=True)
@@ -98,7 +99,7 @@ class WorkflowArtifactE2ETests(unittest.TestCase):
         blob, skill_hashes, helper_hashes, _=make_fixture()
         with tempfile.TemporaryDirectory() as tmp,patch.object(installer,'EXPECTED_SKILLS',skill_hashes),patch.object(installer,'EXPECTED_HELPERS',helper_hashes):
             root=Path(tmp)/'project'
-            installer.install(root,ROOT,blob)
+            installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
             task=root/'docs/tasks/active/AUTH-001-user-login-page'
             task.mkdir(parents=True)
             (task/'approvals.md').write_text('Gate1: SIMULATED_TEST_APPROVAL\nGate2: PENDING\n')

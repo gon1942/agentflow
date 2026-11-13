@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "id": "development",
+  "name": "Full Lifecycle · 전체 개발 관리",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "development",
+  "policy": "protected-development",
+  "built_in": true,
+  "description": "기존 development TASK 계약을 보존하는 전체 실행: ANALYZE → PLAN → GATE1 → IMPLEMENT → VERIFY → REVIEW → GATE2 → COMPLETE."
+}

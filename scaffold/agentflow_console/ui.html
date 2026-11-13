@@ -1,0 +1,668 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>AgentFlow · Management Console</title>
+<style>
+:root{font-family:Inter,Pretendard,system-ui,-apple-system,"Noto Sans KR",sans-serif;color:#17283b;background:#f5f7fb;font-synthesis:none}*{box-sizing:border-box}body{margin:0;min-height:100vh}header{height:76px;background:#13213a;color:#fff;padding:15px 30px;display:flex;align-items:center;justify-content:space-between;gap:14px}header b{font-size:20px;letter-spacing:-.4px}header small{color:#a9b9ce}main{display:grid;grid-template-columns:235px minmax(0,1fr);min-height:calc(100vh - 76px)}nav{background:#fff;border-right:1px solid #e3e9f0;padding:24px 13px;display:flex;flex-direction:column;gap:4px}nav:before{content:'WORKSPACE';font-size:10px;letter-spacing:1.6px;color:#9aa8b8;font-weight:800;margin:0 12px 14px}nav button{display:block;width:100%;text-align:left;border:0;background:transparent;padding:13px 13px;border-radius:9px;cursor:pointer;color:#475b73;font-size:14px;transition:background .15s}nav button:hover{background:#f0f5fb}nav button.active{background:#e9f0ff;color:#1556ba;font-weight:750;box-shadow:inset 3px 0 #2a66d9}article{padding:33px 40px 55px;width:100%;max-width:1440px;min-width:0}.section{display:none}.section.active{display:block}h1{margin:0 0 7px;font-size:27px;letter-spacing:-.6px}h2{font-size:16px;margin:0 0 15px}p{color:#617185;margin:7px 0 16px;line-height:1.65}.section>p{margin-bottom:25px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}.card{background:#fff;border:1px solid #e1e7f0;border-radius:14px;padding:22px;margin-bottom:19px;box-shadow:0 3px 17px #14233b06}.card .card{background:#fbfcff;box-shadow:none;border:1px solid #ebeff5}.card .value{font-size:27px;font-weight:780;overflow-wrap:anywhere;letter-spacing:-.5px}.badge{display:inline-flex;align-items:center;padding:5px 10px;border-radius:99px;background:#eaf1ff;color:#205aa9;font-size:12px;font-weight:700}.danger{background:#fff0f0;color:#a93030}.ok{background:#e7f7ec;color:#1d7a4a}.neutral{background:#eef2f7;color:#53657d}.warning{background:#fff5df;color:#805913}.button-row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}button{border:1px solid #cad6e5;background:#fff;color:#24466a;border-radius:9px;padding:10px 15px;cursor:pointer;font-weight:650;transition:background .15s,transform .1s}button:hover:not(:disabled){background:#f1f6ff}button:active:not(:disabled){transform:translateY(1px)}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #7fa5e7;outline-offset:2px}button.primary{background:#235fcf;border-color:#235fcf;color:white}button.primary:hover:not(:disabled){background:#164aa8}button:disabled{opacity:.45;cursor:not-allowed}input,select,textarea{border:1px solid #cdd8e5;border-radius:9px;padding:10px;background:white;color:#24384f;font:inherit;max-width:100%}input,select{width:100%;margin:6px 0 13px}textarea{width:100%;min-height:260px;resize:vertical;font:13px/1.55 ui-monospace,monospace}label{font-weight:650;font-size:13px;display:block;color:#40556c}.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}.row>*{flex:1}.row button{flex:0 0 auto}.table-scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;font-size:13px}th,td{padding:13px 12px;text-align:left;border-bottom:1px solid #e9eef4;word-break:break-word}th{color:#60738a;background:#f8fafc;font-weight:750}tr:last-child td{border-bottom:0}code,pre{font-family:ui-monospace,SFMono-Regular,monospace}pre{white-space:pre-wrap;overflow-wrap:anywhere;padding:16px;background:#f5f8fc;border:1px solid #eaf0f7;border-radius:10px;max-height:420px;overflow:auto;font-size:12px}.notice{background:#fff7e7;border:1px solid #eed9a9;color:#74541c;padding:14px;border-radius:10px;margin:12px 0 18px;line-height:1.6}.hint{font-size:12px;color:#66798c}.pill{border-radius:30px;padding:6px 11px;background:#edf3fb;display:inline-block;margin:4px;font-size:12px}.profile-card{display:flex;align-items:center;justify-content:space-between;gap:18px;border:1px solid #e7edf4;border-radius:11px;padding:16px;margin-bottom:10px;background:#fff}.profile-card.active-profile{border-color:#a9c2f2;background:#f7faff}.profile-info{min-width:0}.profile-info p{margin:6px 0 0;font-size:12px}.stage-list{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:10px;margin:14px 0}.stage-card{border:1px solid #e2eaf3;background:#fff;border-radius:10px;padding:13px}.stage-card b{font-size:13px}.stage-card small{display:block;color:#71829b;margin:8px 0}.skill-line{display:flex;gap:9px;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid #eef1f5;font-size:12px}.skill-line:last-child{border-bottom:0}.skill-line button{padding:6px 9px;font-size:11px}.mini-note{font-size:12px;color:#5e7084}.mode-banner{border:1px solid #dfe8f2;background:#f7faff;border-radius:11px;padding:13px 16px;display:flex;gap:10px;align-items:center;margin-bottom:17px;color:#3b5879;font-size:12px}.mode-banner b{color:#1b4274}.explain{display:block;color:#576a81;font-size:12px;margin-top:3px}.status-cell{min-width:125px}.details{border:1px solid #e5eaf1;border-radius:10px;padding:12px 15px;margin-top:16px}.details summary{cursor:pointer;font-weight:700;font-size:13px;color:#3d5c7f}.actions-notice{margin:14px 0;padding:13px 16px;border-left:3px solid #356bca;background:#f4f7fd;border-radius:6px;color:#435e7d;font-size:13px}#feedback{position:fixed;right:22px;bottom:22px;max-width:min(580px,90vw);background:#162b46;color:white;padding:13px 21px;border-radius:11px;display:none;box-shadow:0 8px 30px #0f192c50;white-space:pre-wrap;z-index:10}#feedback.show{display:block}@media(max-width:850px){main{grid-template-columns:1fr}nav{display:flex;flex-direction:row;overflow-x:auto;gap:4px;padding:10px;border-bottom:1px solid #e5edf5;position:sticky;top:0;z-index:5}nav:before{display:none}nav button{white-space:nowrap;width:auto}article{padding:23px}header{padding:15px}header b{font-size:16px}.profile-card{flex-wrap:wrap}}@media(prefers-reduced-motion:reduce){*{transition:none!important}}
+
+/* Guided controls; preserve offline, dependency-free UI. */
+.steps{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0 20px}
+.steps span{background:#eaf0f9;color:#325575;border-radius:30px;padding:8px 13px;font-size:12px;font-weight:650}
+.guide-card{border:1px solid #d4e2f6;border-radius:14px;padding:20px;background:#f6faff;margin:15px 0}
+.guide-card h2{color:#1d497e;margin-top:0}
+.radio-options{display:flex;gap:10px;flex-wrap:wrap;margin:8px 0 14px}
+.radio-options label{border:1px solid #d1dbe8;background:#fff;border-radius:9px;padding:12px;cursor:pointer;flex:1;min-width:150px}
+.radio-options label:has(input:checked){border-color:#2866d3;background:#eff5ff}
+.radio-options input{width:auto;margin:0 8px 0 0}
+.workflow-note{background:#ecf9f1;border:1px solid #b9e5cb;border-radius:10px;padding:12px;color:#245f3b;margin:12px 0}
+.error-guide{background:#fff5eb;border:1px solid #f6d3ad;border-radius:10px;padding:11px;white-space:pre-wrap;color:#773b17;margin:10px 0}
+button.slim{padding:7px 11px;font-size:12px}.section-title-line{display:flex;justify-content:space-between;align-items:center;gap:15px}
+.stage-card{cursor:pointer}.stage-card:hover{border-color:#6d9ce8}.stage-card.chosen{border:2px solid #296bd3;background:#f5f9ff}
+footer{padding:16px 30px;color:#738399;font-size:12px}
+.gate-settings{display:flex;gap:14px;flex-wrap:wrap;margin-top:12px}.gate-toggle{display:inline-flex;align-items:center;gap:6px;font-weight:550;white-space:nowrap}.gate-toggle input{width:auto;margin:0}.gate-toggle input:disabled{opacity:.6}.stage-gate-control{margin-top:12px;padding:11px 12px;border:1px solid #d5e2ef;border-radius:10px;background:#f7faff}.stage-gate-control label{display:flex;align-items:center;gap:9px;font-size:13px;cursor:pointer}.stage-gate-control input{width:18px;height:18px;margin:0;accent-color:#235fcf}.stage-gate-control label:has(input:disabled){cursor:not-allowed;opacity:.8}.stage-gate-control .gate-state{font-size:12px;font-weight:700;color:#31577d}.stage-gate-control small{line-height:1.5}.stage-card.gate-off{background:#f5f6f8;border-style:dashed}.stage-card.gate-off>b{color:#768396}
+.skill-source-link{display:inline-flex;align-items:center;color:#1959b3;font-size:13px;font-weight:700;margin:8px 12px 10px 0;text-decoration:underline;text-underline-offset:3px}.skill-source-link:focus-visible{outline:3px solid #7fa5e7}.skill-summary{color:#293f59;font-size:13px;margin:10px 0 5px;line-height:1.65}
+/* v0.5.7: Integration A — dark workflow + stage detail + skill library. Scoped to avoid other console regressions. */
+#trees{color:#e6f1ff;background:#07172b;margin:-33px -40px -55px;padding:30px 32px 56px;min-height:calc(100vh - 76px)}
+#trees .studio-header{display:flex;justify-content:space-between;align-items:center;gap:18px;margin-bottom:20px;flex-wrap:wrap}
+#trees .studio-header h1{color:#f4faff;font-size:25px;margin:6px 0}
+#trees .studio-header p,#trees .studio-section-head span,#trees .studio-footer p{color:#99aec5;font-size:12px;margin:6px 0}
+#trees .studio-eyebrow{font-size:11px;letter-spacing:1.5px;color:#42d9de;font-weight:800}
+#trees .studio-head-actions{display:flex;align-items:end;gap:12px;flex-wrap:wrap}#trees .studio-head-actions label{font-size:11px;color:#9cb5cf}
+#trees select,#trees input{background:#0e243d;color:#e7f5ff;border-color:#294966;margin:5px 0 0}#trees select:focus,#trees input:focus{border-color:#30d1da}
+#trees .studio-head-actions select{min-width:225px}#trees button{color:#cbe3fa;background:#14304e;border:1px solid #33516d}#trees button:hover:not(:disabled){background:#1a4267}
+#trees button.primary,#trees button.studio-add-button{background:#08bfc7;border-color:#08bfc7;color:#00212f}#trees button.primary:hover:not(:disabled),#trees button.studio-add-button:hover:not(:disabled){background:#5ee7e4}
+#trees .studio-state{padding:9px 12px;background:#19314a;border-radius:20px;font-size:12px;color:#b6e7e6;white-space:nowrap}#trees .studio-state.dirty{background:#4f3721;color:#ffe2a8}
+#trees .studio-shell{background:#091d32;border:1px solid #24435f;border-radius:15px;padding:16px}#trees .studio-section-head{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;padding:4px 2px 13px}
+#trees .studio-flow{display:flex;gap:6px;align-items:stretch;overflow-x:auto;padding:0 0 12px}#trees .studio-flow-item{flex:1 0 100px;min-width:100px;text-align:center;padding:13px 7px;background:#10253c;border:1px solid #2b4560;border-radius:10px;position:relative;color:#a3b5c8;cursor:pointer}#trees .studio-flow-item.active{background:linear-gradient(130deg,#073e60,#12426a);border-color:#24bdd8;color:#e8fdff}#trees .studio-flow-item.chosen{box-shadow:0 0 0 2px #46dce4 inset}#trees .studio-flow-item.auto{background:#1c3047;color:#cbdbea;cursor:default}
+#trees .studio-flow-item .studio-flow-icon{display:block;font-size:19px;margin-bottom:7px}#trees .studio-flow-item b{display:block;font-size:11px;white-space:nowrap}#trees .studio-flow-item small{display:block;font-size:10px;margin-top:4px;opacity:.85}#trees .studio-flow-item .flow-dot{position:absolute;right:6px;top:5px;font-size:12px;color:#2ff6c1}#trees .studio-flow-item:not(.active) .flow-dot{color:#8293a8}
+#trees .studio-branches{display:flex;gap:10px;flex-wrap:wrap;background:#0d263e;border:1px solid #24445f;border-radius:10px;padding:11px 13px;margin-bottom:14px;align-items:center}#trees .studio-branches strong{font-size:12px;color:#c3dce9;margin-right:8px}#trees .studio-branch{display:flex;align-items:center;gap:8px;background:#122d47;padding:6px 9px;border-radius:7px;font-size:11px;color:#c7ddf1}#trees .studio-branch input{width:16px;height:16px;margin:0;accent-color:#16d5c9}
+#trees .studio-workspace{display:grid;grid-template-columns:minmax(190px,.85fr) minmax(285px,1.4fr) minmax(225px,1fr);gap:12px}#trees .studio-panel{min-width:0;background:#10243b;border:1px solid #294660;border-radius:12px;padding:14px}#trees .studio-panel-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;gap:6px}#trees .studio-panel-head strong{font-size:13px}#trees .studio-count{background:#1c3f5b;border-radius:20px;color:#8af5e4;font-size:11px;padding:4px 9px;white-space:nowrap}
+#trees .studio-stage-list{display:flex;flex-direction:column;gap:7px}#trees .studio-stage-row{background:#142d48;border:1px solid #2b4a67;border-radius:9px;padding:11px 9px;cursor:pointer;display:flex;align-items:center;gap:7px}#trees .studio-stage-row.active{background:#124059;border-color:#22cdd5}#trees .studio-stage-row.chosen{outline:2px solid #39dfe5}#trees .studio-stage-row .stage-copy{min-width:0;flex:1}#trees .studio-stage-row b{font-size:12px}#trees .studio-stage-row small{display:block;font-size:10px;color:#9eb8cf;margin-top:5px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}#trees .studio-stage-row .stage-skills{color:#80e8df;font-size:10px;white-space:nowrap}#trees .studio-stage-row input{width:17px;height:17px;margin:0;accent-color:#13c9c2;cursor:pointer}
+#trees .studio-intro{background:#102f4b;border:1px solid #275774;border-radius:10px;padding:14px;margin-bottom:12px}#trees .studio-intro b{font-size:15px}#trees .studio-intro p{color:#adcee0;font-size:12px;margin:6px 0}#trees .studio-edit-controls{display:flex;align-items:end;gap:8px;flex-wrap:wrap;margin:10px 0}#trees .studio-edit-controls label{flex:1;font-size:11px;color:#b5cfe5;min-width:130px}#trees .studio-edit-controls select{font-size:12px;margin-top:7px;padding:8px}#trees .studio-edit-controls button{font-size:11px;padding:10px}#trees .studio-hidden-selector{position:absolute!important;width:1px!important;height:1px!important;opacity:0!important;pointer-events:none!important}#trees .studio-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0,0,0,0)}
+#trees .studio-linked-list{display:flex;flex-direction:column;gap:8px;margin-top:12px}#trees .studio-linked-item{border:1px solid #33516a;background:#142c46;padding:13px;border-radius:9px}#trees .studio-linked-head{display:flex;justify-content:space-between;align-items:center;gap:8px;flex-wrap:wrap}#trees .studio-linked-head b{font-size:12px;overflow-wrap:anywhere}#trees .studio-linked-item small{display:block;color:#99b4cd;margin:6px 0;font-size:11px}#trees .studio-linked-item .badge{font-size:10px;padding:3px 7px}#trees .studio-linked-item .button-row{gap:6px}#trees .studio-linked-item button{font-size:11px;padding:6px 9px}#trees .studio-no-skills{font-size:12px;color:#a3b7c9;padding:16px;border:1px dashed #365774;border-radius:9px}
+#trees .studio-library-panel label{font-size:11px;color:#b9d0e5}#trees .studio-library-panel input,#trees .studio-library-panel select{font-size:12px;padding:9px}#trees .studio-library-list{display:flex;flex-direction:column;gap:7px;max-height:530px;overflow-y:auto;margin-top:13px}#trees .studio-library-item{border:1px solid #2d4b66;background:#142d47;border-radius:9px;padding:10px}#trees .studio-library-item strong{font-size:12px;overflow-wrap:anywhere}#trees .studio-library-item small{display:block;font-size:10px;color:#a6c0d9;margin:5px 0}#trees .studio-library-item button{font-size:10px;padding:5px 9px}#trees .studio-library-item .studio-library-title{display:flex;justify-content:space-between;align-items:center;gap:5px}#trees .studio-library-help{color:#8eaac6;font-size:11px;line-height:1.5;margin-top:12px}
+#trees .studio-footer{margin-top:12px;border:1px solid #294966;border-radius:11px;background:#102840;padding:15px;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}#trees .studio-footer strong{font-size:12px}#trees .studio-flow-summary{font-size:12px;color:#72e6eb;margin-top:9px;overflow-wrap:anywhere}#trees .studio-advanced{background:#12253b;border:1px solid #294966;padding:14px;margin-top:13px;border-radius:10px}#trees .studio-advanced summary{cursor:pointer;font-weight:650;font-size:12px}#trees .studio-advanced textarea{margin:13px 0;background:#0b1b2f;border-color:#35516f;color:#d2e9f7}
+@media(max-width:1230px){#trees .studio-workspace{grid-template-columns:minmax(180px,.8fr) minmax(260px,1.4fr)}#trees .studio-library-panel{grid-column:1/-1}#trees .studio-library-list{max-height:270px;display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}}
+@media(max-width:850px){#trees{margin:-23px;padding:22px 14px}#trees .studio-workspace{grid-template-columns:1fr}#trees .studio-library-panel{grid-column:auto}#trees .studio-flow-item{flex-basis:100px}#trees .studio-head-actions{width:100%}}
+
+/* v0.5.9: unified dark design system. No remote fonts or assets. */
+:root{color-scheme:dark;--af-bg:#0a1528;--af-sidebar:#0b1730;--af-surface:#121f38;--af-surface2:#172943;--af-surface3:#203452;--af-border:#2a3d5d;--af-text:#e9f1ff;--af-muted:#9dafc9;--af-accent:#4d9fff;--af-accent2:#1cc7ca;--af-success:#3ad69c;--af-warning:#f6be62;--af-danger:#ff8b9d;--af-radius:14px;--af-shadow:0 12px 32px #03091733;background:var(--af-bg);color:var(--af-text)}
+body{background:var(--af-bg);color:var(--af-text)}
+header{background:#111e39;border-bottom:1px solid var(--af-border);height:72px;padding:12px 24px;position:relative;z-index:6}
+.brand-lockup,.header-actions{display:flex;align-items:center;gap:13px}.brand-lockup>span:last-child{display:grid;gap:2px}.brand-lockup b{font-size:20px}.brand-lockup small{font-size:10px;letter-spacing:1.2px;color:#94afd0}.brand-mark{display:grid;place-items:center;font-size:26px;color:#57c5fa;background:#193555;border:1px solid #2d648e;width:42px;height:42px;border-radius:11px}.header-project{padding:9px 13px;border:1px solid var(--af-border);background:var(--af-surface);border-radius:10px;font-size:12px;color:#cfdef5;max-width:320px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+main{grid-template-columns:225px minmax(0,1fr);min-height:calc(100vh - 72px)}nav{background:var(--af-sidebar);border-right:1px solid var(--af-border);padding:21px 13px;gap:5px;min-width:0}nav:before{display:none}.nav-heading{font-size:10px;letter-spacing:1.8px;font-weight:800;color:#667f9f;margin:7px 12px 12px}nav button{color:#b7c8e2;padding:13px 15px;font-size:13px;border-radius:10px}nav button:hover{background:#1d3150;color:#f3f8ff}nav button.active{color:#eef8ff;background:linear-gradient(100deg,#244a93,#18375e);box-shadow:inset 3px 0 #4ca8ff;border:1px solid #315a98}.nav-spacer{flex:1;min-height:20px}.nav-foot{font-size:11px;color:#7f9cba;background:#102440;border:1px solid #27415f;border-radius:11px;padding:14px;line-height:1.8}.nav-foot::first-line{color:#65d7ab}.nav-foot small{font-size:10px}
+article{max-width:none;padding:30px clamp(19px,2.7vw,45px) 56px;background:var(--af-bg)}.section>h1,.page-heading h1{font-size:26px;color:#f1f6ff;margin:0 0 5px}.section>p,.page-heading p{color:var(--af-muted)}h1,h2,h3{color:#eff5ff}p{color:var(--af-muted)}.section>h1{padding-bottom:6px}.section:not(#trees)>h1:before{content:'MANAGEMENT / WORKSPACE';display:block;font-size:10px;letter-spacing:1.8px;color:#64acd7;margin:0 0 9px;font-weight:800}
+.card,.guide-card,.mode-banner{background:var(--af-surface);border:1px solid var(--af-border);color:var(--af-text);box-shadow:var(--af-shadow);border-radius:var(--af-radius)}.card{padding:21px;margin-bottom:17px}.card .card{background:var(--af-surface2);border-color:var(--af-border)}.guide-card{background:linear-gradient(125deg,#172d4d,#141f39)}.guide-card h2{color:#dff0ff}.steps span{background:#1c3556;color:#b9d8f6}.grid{gap:15px}.badge{background:#19395e;color:#8bc4ff}.badge.ok,.ok{background:#173e38;color:#68e5b0}.badge.danger,.danger{background:#4c2636;color:#ffb0be}.badge.neutral,.neutral{background:#283a53;color:#bed0e8}.badge.warning,.warning{background:#4c3826;color:#ffda95}
+button{background:#1b2f4d;color:#dbeafd;border:1px solid #36516f;border-radius:10px}button:hover:not(:disabled){background:#27476b;color:white}button.primary{background:#287ed8;color:#fff;border-color:#3a90e6}button.primary:hover:not(:disabled){background:#3999e9}button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:2px solid #69c8ff;outline-offset:2px}input,select,textarea{background:#0e2038;border:1px solid #344b6b;color:#e4f1ff}input::placeholder,textarea::placeholder{color:#718ba9}label{color:#bfd0e8}input[type=checkbox],input[type=radio]{accent-color:#37b9e7}th{background:#182c49;color:#b5c8e3}td{border-color:var(--af-border)}.table-scroll{border:1px solid var(--af-border);border-radius:10px}.profile-card,.profile-card.active-profile{background:#172b48;border:1px solid #344d6e;color:var(--af-text)}.profile-card.active-profile{border-color:#4b9cff;background:#1b3657}.stage-card,.stage-card.gate-off{background:#162943;border-color:#314967;color:var(--af-text)}.stage-card.chosen{border-color:#4aa9ec;background:#1b3554}.stage-card small,.hint,.mini-note,.explain,.section>p{color:var(--af-muted)}.mode-banner{color:#bed4ec}.mode-banner b{color:#dbeafd}.radio-options label{background:#192e4c;border-color:var(--af-border);color:#dceaff}.radio-options label:has(input:checked){background:#214367;border-color:#4c9ffe}.notice{background:#392f23;color:#f8d9a3;border-color:#746045}.actions-notice{background:#16324f;color:#bed9f3;border-color:#3d9aea}.workflow-note{background:#163b36;color:#8de0b8;border-color:#2e7666}.error-guide{background:#452c2b;color:#ffbaa9;border-color:#845152}pre{background:#0d1a30;color:#d3e7ff;border-color:#29405d}.pill{background:#1c3859;color:#bcd8fa}.details{border-color:var(--af-border);background:#14253d}.details summary{color:#a8d7ff}.skill-source-link{color:#7bbcff}.skill-summary{color:#c4d7ec}.stage-gate-control{background:#192f4d;border-color:var(--af-border)}.stage-gate-control .gate-state{color:#a5d1f5}.skill-line{border-color:var(--af-border)}
+.page-heading,.section-heading{display:flex;align-items:center;justify-content:space-between;gap:18px;flex-wrap:wrap}.page-heading{margin-bottom:23px}.section-heading{margin-bottom:15px}.section-heading h2{margin:0}.eyebrow{font-weight:800;letter-spacing:1.7px;color:#5ebfe8;font-size:10px}.muted{color:var(--af-muted);font-size:12px}.kpi-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;margin-bottom:17px}.kpi-card{display:flex;align-items:center;gap:15px;min-height:112px;margin-bottom:0}.kpi-icon{display:grid;place-items:center;flex:0 0 52px;height:52px;border-radius:14px;background:#1b3d63;color:#5fc9f8;font-size:25px}.kpi-label{font-size:12px;color:var(--af-muted)}.kpi-card .value{font-size:23px;margin-top:8px}.dashboard-grid{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(270px,1fr);gap:16px;margin-bottom:0}.dashboard-grid>.card{min-width:0}.workflow-cards{display:flex;align-items:center;justify-content:space-around;gap:9px;flex-wrap:wrap;padding:7px 0 14px}.workflow-card{flex:1;min-width:135px;min-height:122px;display:flex;align-items:center;flex-direction:column;text-align:center;justify-content:center;gap:8px;background:linear-gradient(155deg,#213d6f,#162b4b);border:1px solid #355c98;border-radius:12px;padding:13px}.workflow-card:nth-of-type(2){background:linear-gradient(155deg,#392f70,#232647);border-color:#5a4e9a}.workflow-card:nth-of-type(3){background:linear-gradient(155deg,#1c4c69,#12354e);border-color:#337d99}.workflow-card b{font-size:13px}.workflow-card small{color:#b5c9e2;font-size:11px}.workflow-symbol{font-size:21px;color:#93caff}.workflow-arrow{color:#77b6f2}.compact-note{font-size:11px;padding:10px;margin:0}.quick-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}.quick-grid button{min-height:55px;text-align:left}.dashboard-task-row{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:12px 4px;border-bottom:1px solid var(--af-border)}.dashboard-task-row strong{overflow-wrap:anywhere}.empty-state{border:1px dashed #425c78;background:#14243b;padding:27px 15px;text-align:center;border-radius:10px;color:var(--af-muted)}.project-path{display:block;color:#b4ddff;padding:14px;border-radius:10px;background:#0e2038;overflow-wrap:anywhere;border:1px solid var(--af-border)}
+/* Extend the same palette to Skill Tree instead of a self-contained visual island. */
+#trees{background:transparent;color:var(--af-text);margin:0;padding:0;min-height:0}#trees .studio-shell{background:var(--af-surface);border-color:var(--af-border)}#trees .studio-panel,#trees .studio-footer,#trees .studio-advanced{background:var(--af-surface2);border-color:var(--af-border)}#trees .studio-flow-item,#trees .studio-stage-row,#trees .studio-linked-item,#trees .studio-library-item{background:#1a304e;border-color:#355170}#trees .studio-flow-item.active,#trees .studio-stage-row.active{background:#184264;border-color:#49a8f0}#trees .studio-flow-item.chosen,#trees .studio-stage-row.chosen{box-shadow:inset 0 0 0 2px #64c8eb}#trees .studio-intro,#trees .studio-branches{background:#17334f;border-color:#315878}#trees .studio-branch{background:#214260}#trees .studio-head-actions select,#trees select,#trees input{background:#0e2038;border-color:#344b6b}#trees button{background:#1b3150;border-color:#426080;color:#e2f2ff}#trees button.primary,#trees button.studio-add-button{background:#287ed8;color:#fff;border-color:#3a90e6}#trees button.primary:hover:not(:disabled),#trees button.studio-add-button:hover:not(:disabled){background:#3999e9}#trees .studio-count{background:#244568;color:#9ddaff}#trees .studio-state{background:#203653;color:#bcdaef}#trees .studio-flow-summary{color:#8ce2ec}
+@media(max-width:1100px){.dashboard-grid{grid-template-columns:1fr}.kpi-grid{gap:10px}.kpi-card{min-height:100px;padding:15px}.header-project{max-width:170px}}@media(max-width:850px){main{grid-template-columns:1fr}nav{position:static;flex-direction:row;gap:5px;padding:10px;border-right:0;border-bottom:1px solid var(--af-border);overflow-x:auto}nav button{white-space:nowrap;width:auto;flex-shrink:0}.nav-heading,.nav-spacer,.nav-foot{display:none}article{padding:22px 14px}header{padding:12px 14px}.header-project{display:none}#trees{margin:0;padding:0}.kpi-grid{grid-template-columns:1fr}.kpi-card{min-height:90px}.dashboard-grid{grid-template-columns:1fr}}@media(max-width:500px){.workflow-arrow{display:none}.workflow-card{flex-basis:100%;min-height:85px}.quick-grid{grid-template-columns:1fr}.header-actions .badge{font-size:10px}.brand-lockup b{font-size:17px}}
+
+/* v0.6.0 — design-accurate dashboard: five metrics, workflow, donut and three detail panels */
+.dashboard-v060{max-width:1700px}.dashboard-v060 .card{margin-bottom:0}.dashboard-kpis{grid-template-columns:repeat(5,minmax(0,1fr));gap:12px;margin-bottom:15px}.dashboard-kpis .kpi-card{padding:16px;min-height:93px;gap:10px}.dashboard-kpis .kpi-card .value{font-size:26px;margin:0 0 5px}.dashboard-kpis .kpi-icon{width:45px;flex-basis:45px;height:45px}.dashboard-main-row{display:grid;grid-template-columns:minmax(0,1.85fr) minmax(305px,.95fr);gap:14px;margin-bottom:14px}.dashboard-bottom-row{display:grid;grid-template-columns:1.05fr 1.05fr .85fr;gap:14px}.dashboard-main-row>.card,.dashboard-bottom-row>.card{min-width:0}.dashboard-flow .workflow-card{min-width:0;min-height:151px;flex:1}.dashboard-flow .workflow-card:nth-of-type(1){border-color:#467de5}.dashboard-flow .workflow-card:nth-of-type(3){border-color:#4a9cbc}.dashboard-flow-alt{margin-top:10px;padding:9px 12px;background:#142744;border:1px solid #29466c;border-radius:9px;display:flex;flex-wrap:wrap;align-items:center;gap:10px;font-size:12px}.dashboard-flow-alt span{color:#94adcb}.dashboard-flow-alt b{color:#a5bbff}.dashboard-flow-alt small{color:#7e9bb8}.dashboard-donut-layout{display:grid;grid-template-columns:minmax(125px,.9fr) minmax(125px,1fr);gap:17px;align-items:center}.dashboard-donut{width:min(100%,180px);aspect-ratio:1;border-radius:100%;display:grid;place-items:center;margin:auto}.donut-center{width:72%;height:72%;border-radius:100%;display:flex;align-items:center;flex-direction:column;justify-content:center;background:#14233e}.donut-center strong{font-size:34px;color:#f0f6ff}.donut-center small{font-size:11px;color:#8ca6c7}.donut-legend-row{display:flex;justify-content:space-between;gap:7px;align-items:center;font-size:11px;padding:5px 0;color:#c4d4e9}.donut-legend-row span{display:flex;gap:7px;align-items:center}.donut-legend-row i{display:block;width:8px;height:8px;flex-shrink:0;border-radius:2px}.donut-legend-row strong{color:#e9f3ff}.dashboard-disclaimer{font-size:10px;margin:12px 0 0}.dashboard-task-row{padding:11px 2px;font-size:12px}.dashboard-profiles{display:grid;gap:12px}.profile-progress-head{display:flex;justify-content:space-between;gap:12px;font-size:12px;margin-bottom:6px}.profile-progress-head strong{color:#bed4ef}.profile-progress-track{height:9px;border-radius:9px;background:#20324d;overflow:hidden}.profile-progress-track>div{height:100%;background:linear-gradient(90deg,#3468e0,#7d68da);border-radius:9px}.profile-progress:nth-child(3n+2) .profile-progress-track>div{background:linear-gradient(90deg,#6256d6,#ad75ec)}.profile-progress:nth-child(3n+3) .profile-progress-track>div{background:linear-gradient(90deg,#2494c8,#56c4d6)}.dashboard-project-footer{margin-top:16px}.dashboard-project-footer>span{display:block;color:#92a9c7;font-size:11px;margin-bottom:6px}.dashboard-project-footer .project-path{font-size:10px;padding:9px;word-break:break-all}.dashboard-v060 .quick-grid button{min-height:71px;font-size:12px}.dashboard-v060 .section-heading h2{font-size:15px}@media(max-width:1350px){.dashboard-kpis{grid-template-columns:repeat(3,1fr)}.dashboard-bottom-row{grid-template-columns:repeat(2,1fr)}.dashboard-bottom-row>.card:last-child{grid-column:span 2}}@media(max-width:1080px){.dashboard-main-row{grid-template-columns:1fr}.dashboard-bottom-row{grid-template-columns:1fr}.dashboard-bottom-row>.card:last-child{grid-column:auto}}@media(max-width:650px){.dashboard-kpis{grid-template-columns:repeat(2,1fr)}.dashboard-flow{flex-wrap:wrap}.dashboard-flow .workflow-card{min-width:155px}.dashboard-flow .workflow-arrow{display:none}.dashboard-donut-layout{grid-template-columns:1fr 1fr}}@media(max-width:420px){.dashboard-kpis{grid-template-columns:1fr}.dashboard-donut-layout{grid-template-columns:1fr}}
+
+/* v0.6.1 — dashboard aligned to approved mockup */
+.dashboard-v061{color:#e7f0ff;background:#07172b;margin:-33px -40px -55px;padding:30px 32px 56px;min-height:calc(100vh - 76px)}
+.dashboard-v061 h1,.dashboard-v061 h2,.dashboard-v061 h3,.dashboard-v061 strong,.dashboard-v061 b{color:#f5fbff}.dashboard-v061 p,.dashboard-v061 .muted,.dashboard-v061 .kpi-label{color:#8fa7c8}.dashboard-v061 .eyebrow{color:#53d0ff}.dashboard-v061 .page-heading{margin-bottom:18px}.dashboard-v061 .card{background:linear-gradient(180deg,#0d1f36,#0b1a2d);border:1px solid #203957;box-shadow:0 18px 48px rgba(4,11,22,.35);border-radius:18px}.dashboard-v061 .kpi-card{background:linear-gradient(180deg,#0f223b,#0c1d32);min-height:106px}.dashboard-v061 .kpi-icon{background:linear-gradient(180deg,#193e68,#112b48);color:#76dcff}.dashboard-v061 .dashboard-kpis{gap:14px;margin-bottom:18px}.dashboard-main-row-v061{grid-template-columns:minmax(0,1.8fr) minmax(320px,1fr);gap:16px;margin-bottom:16px}.dashboard-bottom-row-v061{grid-template-columns:1fr 1fr 1fr 1fr;gap:16px}.dashboard-v061 .section-heading{margin-bottom:16px}.dashboard-v061 .section-heading h2{font-size:17px}.dashboard-v061 button,.dashboard-v061 .slim{background:#102743;border-color:#274b71;color:#d7ebff}.dashboard-v061 button:hover:not(:disabled){background:#143355}.dashboard-v061 button.primary{background:#1d66d1;border-color:#1d66d1;color:#fff}.dashboard-v061 .badge{background:#143355;color:#9ed8ff}.dashboard-v061 .badge.ok{background:#103426;color:#7df3b2}.dashboard-v061 .badge.warning{background:#3a2d0f;color:#f4d37d}.dashboard-v061 .badge.neutral{background:#212f43;color:#c8d6e8}.dashboard-v061 .badge.danger{background:#3a1f2a;color:#f4a4b8}.dashboard-profile-tabs{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:16px}.dashboard-profile-tab{display:flex;align-items:center;gap:8px;padding:10px 14px;border-radius:999px;background:#0d2440;border:1px solid #26476e;color:#b7ceea;cursor:pointer;font-size:12px;font-weight:700}.dashboard-profile-tab.active{background:linear-gradient(180deg,#1f66d3,#1a4f9b);border-color:#2d79ea;color:#fff;box-shadow:0 0 0 3px rgba(63,141,255,.15)}.dashboard-profile-tab small{display:block;font-size:10px;color:inherit;opacity:.9}.dashboard-profile-banner{display:flex;justify-content:space-between;gap:16px;align-items:flex-start;padding:18px;border-radius:16px;background:linear-gradient(135deg,#122a47,#101f35);border:1px solid #244567;margin-bottom:16px}.dashboard-banner-label{display:inline-block;font-size:11px;letter-spacing:1.2px;color:#74d5ff;font-weight:800;margin-bottom:10px}.dashboard-profile-banner h3{margin:0 0 6px;font-size:22px}.dashboard-profile-banner p{margin:0;max-width:620px}.dashboard-banner-stats{display:grid;grid-template-columns:repeat(3,minmax(88px,1fr));gap:12px;min-width:280px}.dashboard-banner-stats div{padding:12px;border-radius:14px;background:#0c1b2d;border:1px solid #1f3957;text-align:center}.dashboard-banner-stats small{display:block;color:#88a1bf;font-size:11px;margin-bottom:8px}.dashboard-banner-stats strong{font-size:16px}.dashboard-request-line{display:flex;gap:8px;align-items:center;flex-wrap:wrap;margin-bottom:14px}.request-chip{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:999px;background:#10243e;border:1px solid #23486f;color:#cde0f4;font-size:12px;font-weight:700}.request-chip.start{background:#17365b}.request-chip.session{background:#2d2152;border-color:#5c49a2}.request-chip.current{background:#0f3a56;border-color:#1c709d}.request-arrow{color:#77c9ff;font-weight:900}.dashboard-stage-flow{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:12px}.dashboard-stage-card{padding:16px 14px;border-radius:16px;background:linear-gradient(180deg,#142944,#112137);border:1px solid #26486d;min-height:150px;display:flex;flex-direction:column;gap:10px;position:relative}.dashboard-stage-card .stage-order{position:absolute;top:12px;right:12px;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:#0d1a2c;border:1px solid #31557d;font-size:12px;color:#9fc5eb}.dashboard-stage-card .stage-id{font-size:11px;letter-spacing:1.3px;color:#73dcff;font-weight:800}.dashboard-stage-card h4{margin:6px 0 0;font-size:16px;color:#f5fbff}.dashboard-stage-card p{margin:0;font-size:12px;line-height:1.55;color:#97aecd}.dashboard-stage-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto}.dashboard-stage-meta span{display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;background:#0c1c30;border:1px solid #28486c;font-size:11px;color:#c4d6eb}.dashboard-stage-footnote{margin-top:12px;font-size:11px;color:#7e99ba}.dashboard-side-stats{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px}.side-stat{padding:13px;border-radius:14px;background:#0d1d31;border:1px solid #21405f}.side-stat small{display:block;color:#88a1bf;font-size:11px;margin-bottom:8px}.side-stat strong{font-size:13px;display:block;overflow-wrap:anywhere}.dashboard-stage-detail-list{display:flex;flex-direction:column;gap:10px}.dashboard-stage-detail{padding:14px;border-radius:14px;background:#0d1d31;border:1px solid #21405f}.dashboard-stage-detail-head{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;margin-bottom:8px}.dashboard-stage-detail-head b{font-size:14px}.dashboard-stage-detail-head span{font-size:11px;color:#88a1bf}.dashboard-skill-pills{display:flex;flex-wrap:wrap;gap:6px;margin-top:10px}.dashboard-skill-pills i{font-style:normal;display:inline-flex;align-items:center;padding:5px 8px;border-radius:999px;background:#123250;border:1px solid #2f567e;color:#d8ebff;font-size:11px}.dashboard-v061 .dashboard-donut-layout{grid-template-columns:minmax(125px,.9fr) minmax(145px,1fr);gap:18px}.dashboard-v061 .donut-center{background:#09182a}.dashboard-v061 .dashboard-task-row{padding:12px 2px;border-bottom:1px solid #18314d}.dashboard-v061 .dashboard-profiles{display:flex;flex-direction:column;gap:10px}.dashboard-profile-summary{padding:12px 14px;border-radius:14px;background:#0d1d31;border:1px solid #21405f}.dashboard-profile-summary-head{display:flex;justify-content:space-between;gap:10px;align-items:center;margin-bottom:8px}.dashboard-profile-summary small{display:block;color:#86a0c1;margin-top:5px}.dashboard-v061 .quick-grid{gap:10px}.dashboard-v061 .quick-grid button{min-height:70px;background:#11263f}.dashboard-v061 .project-path{background:#09182a;border-color:#21405f;color:#d2e8ff}.dashboard-v061 .empty-state{background:#0c1d31;border-color:#35506f;color:#8fa7c8}.dashboard-v061 .dashboard-disclaimer{color:#6d88a7}.dashboard-v061 .section-heading .muted{font-size:12px}
+@media(max-width:1380px){.dashboard-bottom-row-v061{grid-template-columns:1fr 1fr}.dashboard-bottom-row-v061>.card:last-child{grid-column:span 2}}
+@media(max-width:1080px){.dashboard-main-row-v061,.dashboard-bottom-row-v061{grid-template-columns:1fr}.dashboard-bottom-row-v061>.card:last-child{grid-column:auto}.dashboard-profile-banner{flex-direction:column}.dashboard-banner-stats{width:100%;min-width:0}}
+@media(max-width:700px){.dashboard-v061{margin:-23px -14px -55px;padding:20px 14px 50px}.dashboard-v061 .dashboard-kpis{grid-template-columns:repeat(2,1fr)}.dashboard-stage-flow{grid-template-columns:1fr}.dashboard-profile-tab{width:100%;justify-content:space-between}.dashboard-side-stats{grid-template-columns:1fr}.dashboard-banner-stats{grid-template-columns:1fr 1fr 1fr}}
+@media(max-width:450px){.dashboard-v061 .dashboard-kpis,.dashboard-banner-stats,.dashboard-bottom-row-v061{grid-template-columns:1fr}}
+
+
+/* v0.6.2 — prevent COMPLETE overflow, reserve room for long stage IDs. */
+.dashboard-v061 .dashboard-profile-banner{align-items:stretch;flex-wrap:wrap}
+.dashboard-v061 .dashboard-profile-banner>div:first-child{min-width:230px;flex:1 1 300px}
+.dashboard-v061 .dashboard-banner-stats{flex:0 1 420px;min-width:350px;grid-template-columns:minmax(80px,.75fr) minmax(143px,1.5fr) minmax(100px,1fr);gap:9px}
+.dashboard-v061 .dashboard-banner-stats div{min-width:0;padding:11px 8px;display:flex;flex-direction:column;justify-content:center}
+.dashboard-v061 .dashboard-banner-stats strong{font-size:13px;line-height:1.5;letter-spacing:-.25px;overflow-wrap:anywhere;word-break:normal}
+.dashboard-v061 #dashboardStopAfter{font-size:12px;white-space:normal;overflow-wrap:anywhere;letter-spacing:-.2px}
+.dashboard-activation-bar{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-top:14px}
+.dashboard-v061 .dashboard-activation-bar button{font-size:12px;padding:9px 14px;border-radius:10px}
+.dashboard-v061 .dashboard-activation-bar button.activate-profile{background:#1868d6;border-color:#398dff;color:white}
+.dashboard-v061 .dashboard-activation-bar .activation-status{font-size:11px;color:#94b7d8}
+.dashboard-v061 .dashboard-activation-bar .activation-status.actual{color:#62e9b0}
+.dashboard-v061 .dashboard-profile-tab.is-active:not(.active){border-color:#2b986d}
+@media(max-width:700px){.dashboard-v061 .dashboard-banner-stats{width:100%;min-width:0;grid-template-columns:minmax(64px,.8fr) minmax(125px,1.6fr) minmax(75px,1fr)}}
+@media(max-width:440px){.dashboard-v061 .dashboard-banner-stats{grid-template-columns:1fr 1fr}.dashboard-v061 .dashboard-banner-stats div:nth-child(2){grid-column:span 2;grid-row:1}}
+
+/* v0.7.3 — visible Skill Advisor execution state. */
+.ai-suggest-status{display:inline-flex;align-items:center;gap:8px;margin:10px 0 6px 12px;font-size:12px;font-weight:700;color:#9db4d4}
+.ai-suggest-status.running{color:#78c9ff}
+.ai-suggest-status.running::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid #345f8c;border-top-color:#78c9ff;border-radius:50%;animation:aiSuggestSpin .8s linear infinite}
+.ai-suggest-status.done{color:#7df3b2}
+.ai-suggest-status.failed{color:#ff9aaa}
+@keyframes aiSuggestSpin{to{transform:rotate(360deg)}}
+@media(prefers-reduced-motion:reduce){.ai-suggest-status.running::before{animation:none}}
+/* v0.6.4 Skill Advisor trace panel */
+.advisor-trace-panel pre{max-height:320px;font-size:11px;white-space:pre-wrap;word-break:break-word}.advisor-trace-panel .row label{max-width:500px}
+
+/* v0.7.5: work status, activity, profile summary and quick actions first; typed document counts. */
+.dashboard-v061 .dashboard-bottom-row-v061{margin-bottom:16px}
+.dashboard-documents-panel{margin-bottom:16px}
+.dashboard-document-grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.dashboard-document-tile{display:flex;flex-direction:column;gap:9px;padding:16px;border:1px solid #25496f;border-radius:14px;background:#0d1e32;min-width:0}
+.dashboard-document-name{color:#a6bedb;font-size:12px;font-weight:700}
+.dashboard-document-amount{color:#f4faff;font-size:25px;line-height:1.2}
+.dashboard-document-path{font-size:11px;color:#83a4c9;overflow-wrap:anywhere}
+@media(max-width:950px){.dashboard-document-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:500px){.dashboard-document-grid{grid-template-columns:1fr}}
+</style></head><body>
+<header><div class="brand-lockup"><span class="brand-mark" aria-hidden="true">◈</span><span><b>AgentFlow</b><small>MANAGEMENT CONSOLE · v0.7.5</small></span></div><div class="header-actions"><span class="header-project">◫ <span id="headerProject">현재 프로젝트</span></span><span class="badge" id="topState">연결 확인 중</span></div></header>
+<main><nav id="menu"><div class="nav-heading">WORKSPACE</div><button class="active" data-page="dashboard">◫ 대시보드</button><button data-page="profiles">◈ 프로필 관리</button><button data-page="trees">♧ 스킬 트리</button><button data-page="skills">▤ 스킬 라이브러리</button><button data-page="agents">◎ 에이전트</button><button data-page="execution">◷ 실행·검증</button><button data-page="settings">⚙ 설정</button><div class="nav-spacer"></div><div class="nav-foot">● PROJECT LOCAL<br><small>설정과 스킬은 프로젝트 안에서 관리</small></div></nav>
+<article>
+<section id="dashboard" class="section active dashboard-v061">
+<div class="page-heading"><div><span class="eyebrow">MANAGEMENT OVERVIEW</span><h1>대시보드</h1><p>시안 기반 다크 네이비 대시보드입니다. 선택한 프로필의 실제 실행 단계를 중심으로 현재 상태를 확인합니다.</p></div><button onclick="refresh()">↻ 새로고침</button></div>
+<!-- Daily operations first: requested dashboard priority -->
+<div class="dashboard-bottom-row dashboard-bottom-row-v061">
+  <div class="card"><div class="section-heading"><h2>작업 상태 현황</h2><span class="muted" id="chartCoverage">실제 TASK 데이터</span></div><div class="dashboard-donut-layout"><div id="taskDonut" class="dashboard-donut" role="img" aria-label="작업 상태 분포"><div class="donut-center"><strong id="taskTotal">0</strong><small>전체 작업</small></div></div><div id="taskLegend" class="dashboard-legend"></div></div><p class="muted dashboard-disclaimer">현재 프로젝트에 확인된 작업만 집계합니다. 확인되지 않은 값은 추정하지 않습니다.</p></div>
+  <div class="card"><div class="section-heading"><h2>최근 작업 활동</h2><button class="slim" onclick="show('execution');refreshExecution()">작업 목록</button></div><div id="dashboardTaskList" class="dashboard-tasks muted">상태 조회 전</div></div>
+  <div class="card"><div class="section-heading"><h2>프로필 구성 현황</h2><button class="slim" onclick="show('profiles')">프로필 관리</button></div><div id="dashboardProfiles" class="dashboard-profiles"></div><p class="muted dashboard-disclaimer">Profile별 활성 단계 수와 종료 지점을 요약합니다.</p></div>
+  <div class="card"><div class="section-heading"><h2>빠른 작업</h2></div><div class="quick-grid"><button onclick="show('profiles')">＋ 프로필 관리</button><button onclick="show('trees')">▷ 스킬 트리 편집</button><button onclick="show('skills')">▧ 스킬 관리</button><button onclick="show('execution');refreshExecution()">☷ 작업 목록 보기</button></div><div class="dashboard-project-footer"><span>현재 프로젝트</span><code id="projectPath" class="project-path">—</code></div></div>
+</div>
+<div class="card dashboard-documents-panel" aria-labelledby="dashboardDocumentsTitle">
+  <div class="section-heading"><div><h2 id="dashboardDocumentsTitle">프로젝트 문서 현황</h2><span class="muted">README·템플릿 제외 · 프로젝트 로컬 Markdown 파일</span></div></div>
+  <div id="dashboardDocumentCounts" class="dashboard-document-grid" aria-live="polite">문서 집계 불러오는 중…</div>
+</div>
+<div class="dashboard-main-row dashboard-main-row-v061">
+  <div class="card dashboard-hero-card">
+    <div class="section-heading"><div><h2>사용자 요청 → 실행 단계</h2><span class="muted">선택한 프로필 기준 실제 단계 구조</span></div><button class="slim" onclick="show('profiles')">프로필 관리</button></div>
+    <div id="dashboardProfileTabs" class="dashboard-profile-tabs"></div>
+    <div class="dashboard-profile-banner">
+      <div>
+        <span class="dashboard-banner-label">PROFILE PREVIEW / ACTIVE PROFILE</span>
+        <h3 id="dashboardProfileTitle">—</h3>
+        <p id="dashboardProfileSummary">—</p><div id="dashboardActivationBar" class="dashboard-activation-bar"></div>
+      </div>
+      <div class="dashboard-banner-stats">
+        <div><small>실행 단계</small><strong id="dashboardActiveStageCount">0</strong></div>
+        <div><small>종료 지점</small><strong id="dashboardStopAfter">—</strong></div>
+        <div><small>조건부 분기</small><strong id="dashboardBranchCount">0</strong></div>
+      </div>
+    </div>
+    <div class="dashboard-request-line"><span class="request-chip start">사용자 요청</span><span class="request-arrow">→</span><span class="request-chip session">SESSION</span><span class="request-arrow">→</span><span class="request-chip current">선택한 단계</span></div>
+    <div id="dashboardStageFlow" class="dashboard-stage-flow"></div>
+    <div class="dashboard-stage-footnote">SESSION은 항상 자동 시작됩니다. 이후 단계는 선택한 프로필의 활성 단계 설정에 따라 실행됩니다.</div>
+  </div>
+  <div class="card dashboard-side-card">
+    <div class="section-heading"><div><h2>선택한 프로필 상세</h2><span class="muted">담당 Agent · 연결 Skills · 게이트</span></div><button class="slim" onclick="show('trees')">스킬 트리</button></div>
+    <div class="dashboard-side-stats">
+      <div class="side-stat"><small>게이트</small><strong id="dashboardGateSummary">—</strong></div>
+      <div class="side-stat"><small>Policy</small><strong id="dashboardPolicy">—</strong></div>
+      <div class="side-stat"><small>Skill Tree</small><strong id="dashboardSkillTree">—</strong></div>
+      <div class="side-stat"><small>Primary Agent</small><strong id="dashboardPrimaryAgent">—</strong></div>
+    </div>
+    <div id="dashboardStageDetailList" class="dashboard-stage-detail-list"></div>
+  </div>
+</div>
+
+</section>
+<section id="profiles" class="section"><h1>프로필 관리</h1><p>프로젝트 기본 Profile은 신규 TASK에만 적용합니다. 진행 중 TASK의 고정 실행 계약은 변경되지 않습니다.</p><div class="steps"><span>1. 프로필 추가 또는 선택</span><span>2. 단계별 스킬 설정</span><span>3. 설치·검증</span><span>4. 다음 작업에 적용</span></div>
+<div class="guide-card"><h2>새 프로필 만들기</h2><p>독립 검증·리뷰 단계는 유지합니다. 사용자 정의 프로필의 승인 단계는 생성 후 프로필 관리에서 켜거나 끌 수 있습니다.</p>
+<div class="row"><label>프로필 이름<input id="newProfileName" placeholder="예: 화면 설계 전문가" maxlength="100"></label><label>영문 ID<input id="newProfileId" placeholder="예: ux-specialist" maxlength="64"></label></div>
+<div class="radio-options"><label><input type="radio" name="profileMode" value="create" checked>기본 작업 단계로 새로 만들기</label><label><input type="radio" name="profileMode" value="clone">기존 프로필 복제</label></div>
+<div id="wizardCloneRow" hidden><label>복제할 원본<select id="wizardCloneSource"></select></label></div>
+<div class="button-row"><button class="primary" onclick="createProfileGuided()">프로필 생성하기</button><span class="hint">생성만으로 현재 활성 프로필이 바뀌지는 않습니다.</span></div>
+</div><div class="card"><h2>프로젝트·세션별 Profile</h2><p class="hint">프로젝트 기본값은 신규 TASK에만 적용됩니다. 각 OpenCode / Claude 세션에는 독립적인 기본 Profile을 지정하세요. 지원되는 네이티브 Hook이 요청을 받을 때 세션을 자동 등록하고 최신 기본 Profile을 조회합니다. 기존 TASK에는 적용되지 않습니다. Hook 미지원 호스트는 수동 확인이 필요합니다.</p><div class="row"><label>수동 세션 ID (고급)<input id="contextSessionId" maxlength="64" placeholder="opencode-dev"></label><label>Host<select id="contextHost"><option value="opencode">OpenCode</option><option value="claude">Claude Code</option><option value="codex">Codex</option></select></label><label>기본 Profile<select id="contextProfile"></select></label><button class="primary" onclick="bindContextSession()">세션 기본 Profile 설정</button></div><div id="contextSessions" class="stage-list">조회 전</div><h3>현재 TASK 실행 계약</h3><div id="contextTasks" class="stage-list">조회 전</div></div><div class="card"><h2>설치된 Profile</h2><div id="profileCards"></div></div><div class="card"><details class="details"><summary>고급 사용자용 프로필 JSON 편집</summary><h2>프로필 설정</h2><label>Profile 선택<select id="profileEditSelect" onchange="showProfileEditor()"></select></label><p class="hint">일반 설정은 위 목록에서 선택·활성화합니다. 아래 JSON 편집은 고급 사용자용입니다.</p><textarea id="profileText" spellcheck="false" aria-label="Profile JSON"></textarea><button class="primary" onclick="saveProfile()">Profile 설정 저장</button><p class="hint">5개 기본 Profile의 단계·스킬 설정을 동일하게 변경할 수 있습니다. 활성 TASK 중에는 변경이 차단되며 승인 및 독립 검증 안전 규칙은 유지됩니다.</p></details></div><div class="card"><h2>제공 템플릿으로 추가</h2><div class="row"><label>템플릿<select id="templateSelect"></select></label><button class="primary" onclick="addTemplate()">프로젝트에 추가</button></div><p class="hint">Storyboard와 Task Planning은 신규 설치 시 이미 제공됩니다. Analysis·Bugfix는 필요할 때 추가합니다. 스킬은 프로젝트 설치본을 재사용합니다.</p></div><div class="card"><h2>사용자 정의 프로필 만들기 · 기존 프로필 복제</h2><div class="row"><label>원본<select id="cloneSource"></select></label><label>신규 ID<input id="cloneId" placeholder="storyboard"></label><label>표시 이름<input id="cloneLabel" placeholder="Storyboard"></label></div><button class="primary" onclick="cloneProfile()">복제</button></div></section>
+<section id="trees" class="section studio-page">
+<div class="studio-header"><div><div class="studio-eyebrow">PROFILE MANAGEMENT / SKILL TREE</div><h1>스킬 트리 편집</h1><p>실행 단계와 스킬 연결을 한 화면에서 관리합니다. 저장한 설정은 다음 작업의 Coordinator 실행 계약에 반영됩니다.</p></div><div class="studio-head-actions"><label for="treeSelect">관리할 프로필<select id="treeSelect" onchange="changeTreeSelection()"></select></label><span id="studioDirty" class="studio-state">저장된 설정</span><button class="primary" onclick="saveTree()">변경 사항 저장</button></div></div>
+<div class="studio-shell">
+<div class="studio-section-head"><strong>실행 단계 흐름</strong><span>SESSION은 항상 자동 실행 · 작업 단계 8개 독립 선택</span></div>
+<div id="studioFlow" class="studio-flow" aria-label="실행 단계 흐름"></div>
+<div id="studioBranches" class="studio-branches" aria-label="조건부 단계 설정"></div>
+<div class="studio-workspace">
+<aside class="studio-panel studio-stage-panel"><div class="studio-panel-head"><strong>실행 단계 구성</strong><span id="studioStageCount" class="studio-count"></span></div><div id="treeStageOverview" class="studio-stage-list"></div></aside>
+<div class="studio-panel studio-editor-panel"><div class="studio-panel-head"><strong>선택 단계 상세 편집</strong><span id="studioSelectedStage" class="studio-count"></span></div><div id="studioSelectedIntro" class="studio-intro"></div><div id="stageEditControls" class="studio-edit-controls"><label class="studio-sr-only" for="skillStage">선택 단계</label><select id="skillStage" class="studio-hidden-selector" aria-label="선택된 작업 단계"></select><label for="skillCondition">추가 스킬의 실행 조건<select id="skillCondition"><option value="optional">선택</option><option value="always">필수</option><option value="on_ui_task">UI 작업</option><option value="on_failure">오류 발생</option></select></label><button class="studio-add-button" onclick="addSkillToTree()">선택한 라이브러리 스킬 연결</button></div><div id="stageSkillNotice" class="actions-notice" hidden></div><div id="stageSkillList" class="studio-linked-list"></div></div>
+<aside class="studio-panel studio-library-panel"><div class="studio-panel-head"><strong>스킬 라이브러리</strong><span id="studioLibraryTotal" class="studio-count"></span></div><label for="studioSkillSearch">프로젝트에 설치된 스킬 검색<input id="studioSkillSearch" placeholder="스킬 이름 검색" oninput="drawStudioLibrary()" autocomplete="off"></label><label for="studioSkillFilter">필터<select id="studioSkillFilter" onchange="drawStudioLibrary()"><option value="all">전체</option><option value="installed">검증됨</option><option value="unverified">확인 필요</option><option value="unlinked">현재 단계에 미연결</option></select></label><div id="studioLibraryList" class="studio-library-list"></div><div class="studio-library-help">외부 스킬을 새로 설치하려면 왼쪽 메뉴의 <button class="slim" onclick="show('skills')">스킬 라이브러리</button>에서 소스 검사를 진행하세요.</div><select id="skillToAdd" aria-label="연결할 스킬" class="studio-hidden-selector"></select></aside>
+</div>
+<div class="studio-footer"><div><strong>실행 계약 미리보기</strong><div id="studioFlowSummary" class="studio-flow-summary"></div><p>단계 변경은 확인 즉시 서버에 저장됩니다. 스킬 연결 변경은 상단 저장 버튼을 눌러 확정합니다. 진행 중 TASK는 변경할 수 없습니다.</p></div><button class="primary" onclick="saveTree()">스킬 연결 저장</button></div>
+<details class="studio-advanced"><summary>고급 사용자용 JSON 편집 펼치기</summary><p class="hint">직접 변경한 JSON도 동일한 저장·보호 정책으로 검사합니다.</p><textarea id="treeText" spellcheck="false" aria-label="Skill Tree JSON" oninput="updateStageSkillList()"></textarea><div class="button-row"><button onclick="validateTree()">구조 확인</button><button class="primary" onclick="saveTree()">JSON 저장</button></div></details>
+</div></section>
+<section id="skills" class="section"><h1>스킬 라이브러리</h1><div class="steps"><span>1. 소스 또는 AI 추천</span><span>2. 파일·출처 검사</span><span>3. 설치 승인</span><span>4. 프로필 단계에 연결</span></div>
+<div class="guide-card"><h2>어떤 스킬을 추가하시나요?</h2><p>기존 설치 스킬이면 스킬 트리에서 바로 연결하세요. 새 스킬이라면 아래에서 AI 추천 또는 Git·ZIP·로컬 소스를 선택하세요.</p><div class="button-row"><button onclick="show('trees')">설치된 스킬 연결하기</button><button onclick="document.getElementById('aiQuestion').focus();document.getElementById('aiQuestion').scrollIntoView({behavior:'smooth'})">AI에게 스킬 물어보기</button><button onclick="document.getElementById('sourcePath').focus();document.getElementById('sourcePath').scrollIntoView({behavior:'smooth'})">로컬 / ZIP 가져오기</button><button onclick="document.getElementById('createdSkillName').focus();document.getElementById('createdSkillName').scrollIntoView({behavior:'smooth'})">직접 스킬 작성하기</button><button onclick="document.getElementById('gitUrl').focus();document.getElementById('gitUrl').scrollIntoView({behavior:'smooth'})">Git 가져오기</button></div></div><p>스킬은 프로젝트 내부 세 Agent 경로에만 설치합니다.</p><div class="card"><h2>설치된 스킬 <span class="badge neutral" id="skillsTotal">0</span></h2><p class="hint">무결성은 설치된 파일의 해시 일치 여부입니다. 네이티브 로딩은 실행한 Agent의 별도 증거가 필요합니다.</p><label for="skillSearch">스킬 이름 검색</label><input id="skillSearch" placeholder="스킬 이름으로 검색" oninput="drawSkills()" autocomplete="off"><div class="table-scroll" id="skillsTable"></div></div><div class="card"><h2>ZIP 스킬 파일 선택해서 설치</h2><p class="hint">압축파일 경로를 입력할 필요 없이 PC에서 ZIP 파일을 선택하세요. 압축파일 안에 SKILL.md가 있어야 합니다. 파일 검사 후 설치 승인 버튼이 활성화됩니다.</p>
+<label>ZIP 파일 선택<input id="skillZipFile" type="file" accept=".zip,application/zip" onchange="resetZipPreview()"></label>
+<div class="button-row"><button onclick="inspectZipFile()">1. 파일 검사</button><button class="primary" id="uploadInstallBtn" disabled onclick="installZipFile()">2. 검토 후 설치 승인</button></div><pre id="zipUploadPreview">ZIP 파일을 선택한 후 파일 검사를 누르세요.</pre></div>
+<div class="card"><h2>내 스킬 직접 만들기</h2><p class="hint">외부 파일 없이 SKILL.md 하나를 안전하게 생성합니다. AI 추천 내용을 참고하여 작성할 수 있습니다. 실제 네이티브 실행은 별도 검증됩니다.</p>
+<div class="row"><label>스킬 영문 ID<input id="createdSkillName" placeholder="my-ux-skill" maxlength="64" autocomplete="off"></label><label>간단한 설명<input id="createdSkillDescription" placeholder="UX 요구사항 분석 및 스토리보드 검증" maxlength="350"></label></div>
+<label>스킬 실행 지침<textarea id="createdSkillInstructions" placeholder="## 목적
+사용자 요구사항을 분석하여 화면별 스토리보드를 작성한다..." spellcheck="false"></textarea></label>
+<div class="button-row"><button onclick="inspectCreatedSkill()">1. SKILL.md 미리보기</button><button id="createdSkillInstallBtn" class="primary" disabled onclick="installCreatedSkill()">2. 검토 후 프로젝트에 설치</button></div><pre id="createdSkillPreview">ID·설명·실행 지침을 입력한 후 미리보기를 확인하세요.</pre></div>
+<div class="card"><h2>관리 스킬 제거</h2><div class="notice">스킬 트리에서 연결 해제하는 것과 프로젝트에서 파일을 제거하는 것은 다른 작업입니다. 이 영역은 파일 제거 기능입니다.</div><div class="row"><label>스킬 이름<input id="removeSkillName" placeholder="my-skill"></label><button onclick="removeSkill()">설치 스킬 제거</button></div><p class="hint">기본 7종은 삭제할 수 없습니다. 다른 Tree에서 사용하는 스킬이나 사용자 수정 파일은 삭제하지 않습니다.</p></div><div class="card"><h2>AI 스킬 도우미 · 검색·검토 제안 (실험적)</h2><label>연결된 코딩 에이전트<select id="aiHost"><option value="opencode">OpenCode</option><option value="claude">Claude Code</option><option value="codex">Codex</option></select></label><div class="row"><label>추천 대상 프로필<select id="aiProfile" onchange="updateAiStages()"></select></label><label>추천 대상 단계<select id="aiStage"></select></label></div><p class="hint">AI 추천은 아래에서 선택한 프로필·단계를 기준으로 합니다. 스킬 설치·연결은 별도 승인 후 진행됩니다.</p><label><input type="checkbox" id="aiExternalSearch" checked style="width:auto"> 외부 스킬 검색: 프로젝트 로컬 Vercel Skills CLI 우선, 미설치·실패 시 GitHub 대체 검색 (요청 원문은 외부 검색에 전송하지 않음)</label><label>요청 내용<textarea id="aiQuestion" rows="6" maxlength="2000" placeholder="필요한 스킬의 목적, 검증 방식, 기술 환경을 자세히 작성하세요"></textarea></label><button class="primary" id="aiSuggestButton" onclick="suggestSkills()">AI에게 스킬 추천 요청</button><span id="aiSuggestStatus" class="ai-suggest-status" role="status" aria-live="polite">대기 중</span><div class="notice">AI 추천은 설치가 아닙니다. 아래 Git/ZIP/로컬 방식으로 출처를 먼저 확인한 뒤 설치를 명시적으로 승인해야 합니다.</div><div class="card advisor-trace-panel"><div class="section-heading"><h2>추천 실행 이력 및 검증</h2><button class="slim" onclick="loadAdvisorRuns()">↻ 이력 새로고침</button></div><p class="hint">실행 ID별 검색 엔진·검색어·단계·결과를 확인합니다. 로그에는 요청 원문, 모델 원문, 인증 정보가 저장되지 않습니다.</p><div class="row"><label>실행 이력<select id="advisorRuns" onchange="loadAdvisorTrace()"><option value="">조회 전</option></select></label></div><pre id="advisorTraceView">실행 이력을 선택하면 로그가 표시됩니다.</pre><div id="advisorAssessment" class="hint"></div></div>
+<div id="aiCandidatePanel" class="card" hidden><h2>스킬 추천 목록 · 선택 후 적용</h2><p class="hint">로컬 검증 스킬은 선택 후 연결할 수 있습니다. 외부 추천은 실제 Git 소스 검사를 거쳐야 설치할 수 있습니다. 설치·배치는 자동 실행되지 않습니다.</p><div id="aiCandidateList"></div><div class="button-row"><button class="primary" onclick="applyAiLocal()">선택한 로컬 스킬 단계 연결</button></div><p class="hint">연결 전 최종 승인이 필요하며, 실제 네이티브 스킬 로딩은 별도로 검증해야 합니다.</p></div><div id="aiNextSteps" class="actions-notice" hidden>AI가 추천한 스킬을 설치하려면 아래 Git URL과 고정 Commit 또는 로컬 ZIP/폴더 경로를 입력해 <b>설치 전 분석</b>을 실행하세요. 출처 확인과 승인 후에만 설치되며, 설치 후 스킬 트리에서 연결해야 합니다. <button type="button" onclick="useAiSkillContext()">선택한 프로필·단계에서 스킬 연결하기</button></div><pre id="aiResult">이 기능은 호스트 CLI가 설치·설정되어 있어야 동작합니다. 추천 결과는 실제 설치나 검증을 의미하지 않습니다.</pre></div><div class="card"><h2>Git 스킬 가져오기 (HTTPS 또는 file:/// / 고정 Commit)</h2><div class="row"><label>Git URL<input id="gitUrl" placeholder="https://github.com/owner/repo.git"></label><label>40자리 Commit SHA<input id="gitCommit" placeholder="40-digit commit SHA (필수)"></label></div><label>스킬 하위 폴더<input id="gitSubdir" placeholder="skills/frontend-design"></label><p class="hint">GitHub 주소만 입력했다면 먼저 ‘최신 Commit SHA 조회’를 누르세요. 조회한 SHA를 고정한 후 소스 검사와 설치 승인을 진행합니다. GitHub 이외의 주소는 직접 40자리 Commit을 입력해야 합니다.</p><div class="row"><button type="button" onclick="resolveGitCommit()">GitHub 최신 Commit SHA 조회</button><button onclick="inspectGit()">1. Git 소스 검사</button><button id="installGitBtn" class="primary" disabled onclick="installGit()">2. 검토 후 설치 승인</button></div><pre id="gitPreview">Git 설치 전 출처·Commit·파일 목록을 검토하세요.</pre></div><div class="card"><h2>Local / ZIP 가져오기</h2><div class="row"><label>소스 종류<select id="sourceKind"><option value="local">로컬 폴더</option><option value="zip">ZIP 파일</option></select></label><label>서버 로컬 경로<input id="sourcePath" placeholder="/home/user/skills/my-skill"></label></div><p class="hint">외부 스킬 소스는 코드 리뷰 후 설치하세요. LLM 추천 연동과 공개 레지스트리 검색은 별도 검증 대상이며, 설치 시 스크립트를 실행하지 않습니다.</p><div class="row"><button onclick="inspectSkill()">1. 설치 전 분석</button><button id="installSkillBtn" class="primary" disabled onclick="installSkill()">2. 검토 후 설치 승인</button></div><pre id="skillPreview">소스를 입력하고 설치 전 분석을 실행하세요.</pre></div></section>
+<section id="agents" class="section"><h1>에이전트 구성</h1><p>기존 네이티브 워커를 유지하며 단계별 스킬 트리의 담당 역할을 확인합니다. 이 화면은 설정 현황 조회용입니다.</p><div class="grid" id="agentsGrid"></div><div class="notice">에이전트 목록 표시가 실제 네이티브 파견 성공을 증명하지는 않습니다. 호출 증거는 실행·검증 화면과 TASK 로그에서 확인하세요.</div></section>
+<section id="execution" class="section"><h1>실행 계약 및 검증</h1><p>Coordinator가 새 작업 시작 시 이 계약을 조회하도록 안내됩니다. 웹 콘솔은 Workflow 엔진이 아닙니다.</p><div class="card"><div class="button-row"><button class="primary" onclick="loadContract()">현재 실행 계약 확인</button><button onclick="refreshExecution()">작업 상태 갱신</button></div><div id="contractSummary" class="stage-list"></div><div class="actions-notice">실행 계약 조회는 설정 확인이며, 실제 Worker 파견 또는 네이티브 Skill 로딩 증거를 대신하지 않습니다.</div><details class="details"><summary>실행 계약 원본 JSON 보기</summary><pre id="contractData">설정 조회 전</pre></details></div><div class="card"><h2>진행 중 TASK</h2><div id="executionTasks">조회 전</div></div><div class="card"><h2>Session Rotation · 관리형 Worker</h2><p>세션 회전 코어의 기록만 조회합니다. OpenCode·Claude·Codex 네이티브 세션 교체는 미검증이며, 이 화면에서 Worker를 종료하거나 자동 재개하지 않습니다.</p><div class="row"><label>TASK ID<input id="rotationTaskId" placeholder="LOGIN-001" autocomplete="off"></label><button onclick="refreshRotation()">회전 상태·이력 조회</button></div><pre id="rotationStatus">TASK를 입력하고 조회하세요.</pre><details class="details"><summary>회전 이벤트 로그</summary><pre id="rotationHistory">이력 조회 전</pre></details></div></section>
+<section id="settings" class="section"><h1>프로젝트 설정</h1><div class="card"><h2>적용 중인 안전 정책</h2><p>127.0.0.1 전용 서버 · 임시 접근 토큰 · 프로젝트별 스킬 설치 · 기존 TASK 계약 고정 · 신규 TASK 기본 Profile 선택 · 개발 기본 Gate 1/2 필수 · 사용자 정의 프로필 Gate 선택 가능</p><div id="settingsDetails"></div></div></section>
+</article></main><div role="status" id="feedback" hidden></div>
+<dialog id="afModal" class="af-modal" aria-labelledby="afModalTitle" aria-describedby="afModalText">
+ <div class="af-modal-content"><h2 id="afModalTitle">AgentFlow 알림</h2><p id="afModalText"></p>
+ <div class="af-modal-actions"><button id="afModalCancel" type="button">취소</button><button id="afModalOK" type="button" class="primary">확인</button></div></div>
+</dialog>
+<style>
+.af-modal{position:fixed;inset:0;margin:auto;width:min(480px,calc(100vw - 32px));max-height:80vh;overflow-y:auto;padding:0;border:1px solid #46729a;border-radius:16px;background:#172a45;color:#edf5ff;box-shadow:0 28px 90px #000b;z-index:9999}
+.af-modal::backdrop{background:#050b17b8;backdrop-filter:blur(3px)}
+.af-modal-content{padding:26px}.af-modal h2{font-size:19px;margin:0 0 15px}.af-modal p{white-space:pre-wrap;overflow-wrap:anywhere;line-height:1.65;color:#c8dbf3}.af-modal-actions{display:flex;justify-content:flex-end;gap:10px;margin-top:24px}.af-modal-actions button{min-width:88px}
+.studio-stage-warning{font-size:11px;color:#f7c684;display:block;margin-top:5px}.studio-stage-row input:disabled{cursor:not-allowed}
+</style>
+<script>
+'use strict';
+const token=new URLSearchParams(location.hash.replace(/^#/,'' )).get('token')||'';
+let inspectedLocal=null, inspectedGit=null, inspectedCreated=null, inspectedZip=null;
+let gitInspectionEpoch=0;
+const gitInspectionPlaceholder='Git 설치 전 출처·Commit·파일 목록을 검토하세요.';
+function resetGitInspection(message=gitInspectionPlaceholder){
+ gitInspectionEpoch++;
+ inspectedGit=null;
+ $('installGitBtn').disabled=true;
+ $('gitPreview').textContent=message;
+}
+function setGitCandidate(url,commit,subdir){
+ resetGitInspection('새 스킬 후보를 선택했습니다. Git 원본의 출처·Commit·파일 목록을 다시 검사하세요.');
+ $('gitUrl').value=url||'';
+ $('gitCommit').value=commit||'';
+ $('gitSubdir').value=subdir||'';
+}
+
+let state=null, profiles=[], trees=[], skills=[];
+let dashboardProfileId="";
+let lastAiRecommendation=null;
+const $=id=>document.getElementById(id);
+for(const id of ['gitUrl','gitCommit','gitSubdir']){
+ $(id).addEventListener('input',()=>resetGitInspection('입력이 변경되었습니다. Git 소스를 다시 검사해야 설치할 수 있습니다.'));
+}
+
+let afModalResolve=null;
+function afLayer(text, ask=false){
+ const dialog=$('afModal');
+ // Explicitly resolve any pending confirmation when a newer layer opens.
+ if(afModalResolve){afModalResolve(false);afModalResolve=null;}
+ $('afModalTitle').textContent=ask?'AgentFlow 확인':'AgentFlow 알림';
+ $('afModalText').textContent=String(text);
+ $('afModalCancel').hidden=!ask;
+ return new Promise(resolve=>{
+  let settled=false;
+  const finish=result=>{if(settled)return;settled=true;afModalResolve=null;dialog.close();resolve(result)};
+  afModalResolve=finish;
+  $('afModalOK').onclick=()=>finish(true);
+  $('afModalCancel').onclick=()=>finish(false);
+  dialog.oncancel=e=>{e.preventDefault();finish(false)};
+  if(!dialog.open)dialog.showModal();
+  $('afModalOK').focus();
+ });
+}
+function msg(text){void afLayer(text,false)}
+function uiConfirm(text){return afLayer(text,true)}
+async function api(path, data){const args={headers:{'X-AgentFlow-Token':token}};if(data!==undefined){args.method='POST';args.headers['Content-Type']='application/json';args.body=JSON.stringify(data)}let r;try{r=await fetch(path,args)}catch(e){throw Error('서버 연결 실패: 콘솔 서버가 실행 중인지, 주소가 올바른지 확인하세요 ('+path+')')}let j;try{j=await r.json()}catch(e){throw Error('서버 응답을 해석할 수 없습니다 (HTTP '+r.status+'). 서버 터미널을 확인하세요.')}if(!r.ok)throw Error(errorMessage(j.error||'HTTP '+r.status));return j}
+function errorMessage(code){const map={AUTH_OR_ORIGIN_REJECTED:'인증 또는 브라우저 출처가 차단됐습니다. 콘솔을 다시 열어 표시된 주소로 접속하세요.',AUTH_REQUIRED:'접근 토큰이 없습니다. 콘솔을 다시 열어주세요.',TASK_ACTIVE:'진행 중인 TASK가 있어 변경할 수 없습니다.',PROFILE_ALREADY_EXISTS:'같은 ID의 프로필이 이미 있습니다.',TEMPLATE_ALREADY_INSTALLED:'선택한 템플릿은 이미 추가되어 있습니다.',INVALID_ID:'ID는 영문 소문자로 시작하며 소문자·숫자·하이픈만 허용합니다.',SKILL_ALREADY_EXISTS:'이미 설치된 스킬입니다.',SOURCE_CHANGED:'검사 이후 소스 파일이 변경됐습니다. 다시 검사해 주세요.',INVALID_AI_QUERY:'추천할 키워드를 입력하세요 (1~2000자).',INVALID_AI_STAGE:'선택한 단계에 스킬을 추천할 수 없습니다.',INVALID_AI_PROFILE:'프로필 선택을 확인하세요.',VERIFY_REQUIRES_ARTIFACT_STAGE:'VERIFY에 사용할 산출물이 없습니다. ANALYZE·PLAN·IMPLEMENT가 모두 미사용인 경우에는 앞선 작업의 산출물 경로가 필요합니다. 다른 단계 설정은 자동 변경하지 않습니다.',WORKER_CANNOT_OWN_APPROVAL_GATES:'Worker가 Gate를 선택할 수는 있지만, 실제 승인 기록은 사용자가 직접 생성해야 합니다.',REVIEW_REQUIRES_VERIFY:'REVIEW를 사용하려면 VERIFY가 필요합니다.',GATE2_REQUIRES_REVIEW:'Gate 2를 사용하려면 REVIEW가 필요합니다.',IMPLEMENT_REQUIRES_GATE1_FOR_PLANNED_FLOW:'계획과 구현을 함께 수행할 때 Gate 1 승인 단계를 유지해야 합니다.'}; const hit=Object.keys(map).find(k=>String(code).startsWith(k));return hit?map[hit]+' ['+code+']':code}
+function element(tag,text,cls){const e=document.createElement(tag);if(text!==undefined)e.textContent=String(text);if(cls)e.className=cls;return e}
+function clear(node){node.replaceChildren()}
+function show(page){document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===page));document.querySelectorAll('#menu button').forEach(x=>{x.classList.toggle('active',x.dataset.page===page);x.setAttribute('aria-current',x.dataset.page===page?'page':'false')});history.replaceState(null,'','#token='+encodeURIComponent(token)+'&page='+encodeURIComponent(page));window.scrollTo({top:0,behavior:'instant'})}
+document.querySelectorAll('#menu button').forEach(x=>x.onclick=()=>show(x.dataset.page));
+function options(target,arr,field='id'){const prior=target.value;clear(target);for(const o of arr){const value=o[field]??o.name??o.id;if(value===undefined||value===null)continue;const item=document.createElement('option');item.value=String(value);const display=o.name||o.id||String(value);const extra=o.id&&o.id!==display?' ('+o.id+')':'';item.textContent=display+extra;target.append(item)}if(Array.from(target.options).some(x=>x.value===prior))target.value=prior}
+function statusBadge(text,kind){return element('span',text,'badge '+kind)}
+function skillState(s){return s.verified?['검증됨','ok']:['확인 필요','danger']}
+async function refresh(){try{let templates;[state,profiles,trees,skills,templates]=await Promise.all([api('/api/status'),api('/api/profiles'),api('/api/trees'),api('/api/skills'),api('/api/templates')]);clear($('templateSelect'));for(const id of templates.filter(x=>!profiles.some(p=>p.id===x))){const option=element('option',id);option.value=id;$('templateSelect').append(option)}if(!$('templateSelect').options.length){const option=element('option','모든 기본 템플릿이 추가되었습니다');option.value='';$('templateSelect').append(option)}$('topState').textContent=state.tasks.length?'TASK ACTIVE — 계약 고정':'READY';$('topState').className='badge '+(state.tasks.length?'warning':'ok');const dc=state.dashboard?.document_counts||{};const dcRoot=$('dashboardDocumentCounts');dcRoot.replaceChildren();for(const [key,label] of [['requirements','요구사항'],['architecture','아키텍처'],['design','상세 설계'],['storyboards','스토리보드']]){const tile=element('div','','dashboard-document-tile');const name=element('span',label,'dashboard-document-name');const amount=element('strong',String(dc[key]??0)+'건','dashboard-document-amount');const path=element('code','docs/'+key+'/','dashboard-document-path');tile.append(name,amount,path);dcRoot.append(tile)}$('skillsTotal').textContent=String(skills.length);$('projectPath').textContent=state.project; $('headerProject').textContent=String(state.project).split('/').filter(Boolean).slice(-1)[0]||state.project; renderDashboardTasks();renderDashboardOverview();options($('cloneSource'),profiles);options($('wizardCloneSource'),profiles);const selectedProfile=$('profileEditSelect').value;options($('profileEditSelect'),profiles);if(selectedProfile&&profiles.some(x=>x.id===selectedProfile))$('profileEditSelect').value=selectedProfile;showProfileEditor();const selected=$('treeSelect').value;options($('treeSelect'),trees);for(const o of $('treeSelect').options){const profile=profiles.find(p=>p.skill_tree===o.value);if(profile)o.textContent=(profile.name||profile.id)+' ('+profile.id+')';}if(selected&&trees.some(x=>x.id===selected))$('treeSelect').value=selected;options($('skillToAdd'),skills,'name');const aiProfileBefore=$('aiProfile').value;options($('aiProfile'),profiles);options($('contextProfile'),profiles);if(aiProfileBefore&&profiles.some(p=>p.id===aiProfileBefore))$('aiProfile').value=aiProfileBefore;else $('aiProfile').value=state.active_profile.profile;updateAiStages();showTree();drawProfiles();drawContextRegistry();drawSkills();drawAgents();$('settingsDetails').textContent='프로젝트: '+state.project+' · 네이티브 Worker 파견: '+state.native_worker_dispatch+' · Skill 로딩: '+state.native_skill_load}catch(e){$('topState').textContent='ERROR';msg(e.message)}}
+
+function renderDashboardTasks(){
+ const container=$('dashboardTaskList');if(!container||!state)return;
+ clear(container);const items=Array.isArray(state.dashboard?.recent_tasks)?state.dashboard.recent_tasks:[];
+ if(!items.length){container.append(element('div','등록된 작업이 없습니다.','empty-state'));return}
+ for(const item of items.slice(0,6)){
+  const line=element('div',undefined,'dashboard-task-row');line.append(element('strong',item.id),statusBadge(item.status,item.status==='COMPLETED'?'ok':item.status==='PLAN_READY'?'neutral':'warning'));container.append(line);
+ }
+}
+function profileTree(profile){return trees.find(t=>t.id===profile?.skill_tree)}
+function stageEntry(profile,id){return profileTree(profile)?.stages?.find(s=>s.id===id)}
+function dashboardSetProfile(id){dashboardProfileId=id;renderDashboardOverview()}
+async function dashboardActivateProfile(id){
+ const p=profiles.find(x=>x.id===id);
+ if(!p){msg('프로필을 찾을 수 없습니다.');return}
+ if(state?.active_profile?.profile===id){msg('이미 활성 프로필입니다.');return}
+ if(!await uiConfirm((p.name||p.id)+' 프로필을 다음 작업부터 활성화할까요?'))return;
+ try{await api('/api/profile/activate',{profile:id,generation:state.active_profile.generation});
+ dashboardProfileId=id;await refresh();msg('활성 프로필 변경 완료 — 다음 작업부터 적용됩니다.');}
+ catch(e){msg(e.message);}
+}
+
+function renderDashboardOverview(){
+ const counts=state?.dashboard?.status_counts||{};
+ const groups=[["PLAN_READY","계획 대기","#438cf4"],["WAITING_PLAN_APPROVAL","승인 대기","#9d72ea"],["IN_PROGRESS","진행 중","#55bfdf"],["COMPLETED","완료","#3ccf9b"],["LEGACY_UNVERIFIED","상태 확인 필요","#e6a04b"]];
+ const total=groups.reduce((n,[id])=>n+(Number(counts[id])||0),0);
+ $('taskTotal').textContent=String(total);
+ const legend=$('taskLegend');clear(legend);let pos=0;const arcs=[];
+ for(const [id,label,color] of groups){const count=Number(counts[id])||0; const end=pos+(total?count/total*100:0);if(count)arcs.push(`${color} ${pos}% ${end}%`);pos=end;
+  const line=element('div',undefined,'donut-legend-row');const lbl=element('span',label);const dot=element('i');dot.style.background=color;lbl.prepend(dot);line.append(lbl,element('strong',String(count)));legend.append(line);
+ }
+ $('taskDonut').style.background=arcs.length?`conic-gradient(${arcs.join(',')})`:'conic-gradient(#253a58 0% 100%)';
+ const available=(profiles||[]);
+ const preferred=dashboardProfileId||state?.active_profile?.profile;
+ let profile=available.find(p=>p.id===preferred)||available[0]||null;
+ if(profile)dashboardProfileId=profile.id;
+ const tabRoot=$('dashboardProfileTabs');clear(tabRoot);
+ for(const p of available){
+  const btn=element('button',undefined,'dashboard-profile-tab'+(profile&&p.id===profile.id?' active':'' )+(state?.active_profile?.profile===p.id?' is-active':''));
+  btn.type='button';
+  btn.onclick=()=>dashboardSetProfile(p.id);
+  const label=document.createElement('span');label.innerHTML=`<strong>${p.name||p.id}</strong><small>${p.id}</small>`;
+  btn.append(label);
+  tabRoot.append(btn);
+ }
+ const stageFlow=$('dashboardStageFlow');clear(stageFlow);
+ const detailList=$('dashboardStageDetailList');clear(detailList);
+ if(!profile){
+  clear($('dashboardActivationBar'));
+  $('dashboardProfileTitle').textContent='프로필 없음';
+  $('dashboardProfileSummary').textContent='등록된 프로필이 없습니다.';
+  $('dashboardActiveStageCount').textContent='0';
+  $('dashboardStopAfter').textContent='—';
+  $('dashboardBranchCount').textContent='0';
+  $('dashboardGateSummary').textContent='—';
+  $('dashboardPolicy').textContent='—';
+  $('dashboardSkillTree').textContent='—';
+  $('dashboardPrimaryAgent').textContent='—';
+  stageFlow.append(element('div','등록된 프로필이 없습니다.','empty-state'));
+  detailList.append(element('div','표시할 단계 정보가 없습니다.','empty-state'));
+ } else {
+  const stages=selectedStages(profile);
+  const branches=branchesFor(profile);
+  const activation=$('dashboardActivationBar');clear(activation);
+  const isActuallyActive=state?.active_profile?.profile===profile.id;
+  const st=element('span',isActuallyActive?'● 현재 활성 프로필':'○ 미리보기 · 아직 활성화되지 않음','activation-status'+(isActuallyActive?' actual':''));
+  activation.append(st);
+  if(!isActuallyActive){
+    const activate=element('button','이 프로필 활성화','activate-profile');activate.type='button';
+    activate.disabled=false;
+    activate.title='프로젝트 신규 TASK 기본 Profile 변경 (진행 중 TASK에는 영향 없음)';
+    activate.onclick=()=>dashboardActivateProfile(profile.id);
+    activation.append(activate);
+  }
+  $('dashboardProfileTitle').textContent=profile.name||profile.id;
+  $('dashboardProfileSummary').textContent=`${profile.id} · ${profile.workflow||'workflow'} · ${profile.policy||'policy'} · ${stages.length?stages.join(' → '):'선택된 실행 단계 없음'}`;
+  $('dashboardActiveStageCount').textContent=String(stages.length);
+  $('dashboardStopAfter').textContent=stopAfter(profile);
+  $('dashboardBranchCount').textContent=String([branches.BUG_FAIL,branches.REVIEW_FIX].filter(Boolean).length);
+  $('dashboardGateSummary').textContent=[gatesFor(profile).GATE1?'GATE1':'',gatesFor(profile).GATE2?'GATE2':''].filter(Boolean).join(' · ')||'사용 안 함';
+  $('dashboardPolicy').textContent=profile.policy||'—';
+  $('dashboardSkillTree').textContent=profile.skill_tree||'—';
+  $('dashboardPrimaryAgent').textContent=profile.primary_agent||'coordinator';
+  stages.forEach((id,idx)=>{
+   const entry=stageEntry(profile,id)||{};
+   const skills=(entry.skills||[]).map(s=>s.name);
+   const agent=entry.agent||profile.primary_agent||'coordinator';
+   const card=element('div',undefined,'dashboard-stage-card');
+   card.append(element('div',String(idx+1),'stage-order'));
+   card.append(element('div',id,'stage-id'));
+   const title=element('h4',id);card.append(title);
+   card.append(element('p',stageDescriptions[id]||'선택된 프로필 설정에 따라 실행되는 단계입니다.'));
+   const meta=element('div',undefined,'dashboard-stage-meta');
+   meta.append(element('span','Agent · '+agent));
+   meta.append(element('span','Skills · '+(skills.length?skills.length:'0')));
+   if(id.startsWith('GATE'))meta.append(element('span','사용자 승인'));
+   card.append(meta);
+   stageFlow.append(card);
+   const detail=element('div',undefined,'dashboard-stage-detail');
+   const head=element('div',undefined,'dashboard-stage-detail-head');
+   const left=document.createElement('div');left.append(element('b',id),element('span',stageDescriptions[id]||''));
+   head.append(left,element('span','담당 · '+agent));
+   detail.append(head);
+   const desc=element('div',`연결 스킬 ${skills.length}개${id.startsWith('GATE')?' · 스킬 사용 없음':''}`,'mini-note');
+   detail.append(desc);
+   const pills=element('div',undefined,'dashboard-skill-pills');
+   if(skills.length)skills.forEach(name=>pills.append(element('i',name)));
+   else pills.append(element('i',id==='COMPLETE'||id==='SESSION'?'시스템 단계':'연결 스킬 없음'));
+   detail.append(pills);
+   detailList.append(detail);
+  });
+ }
+ const root=$('dashboardProfiles');clear(root);
+ for(const p of available){
+  const stages=selectedStages(p);const box=element('div',undefined,'dashboard-profile-summary');
+  const head=element('div',undefined,'dashboard-profile-summary-head');
+  head.append(element('strong',p.name||p.id),element('span',stopAfter(p),'badge neutral'));
+  box.append(head);
+  box.append(element('div',`${stages.length}단계 활성 · ${stages.join(' → ')||'선택된 단계 없음'}`,'mini-note'));
+  box.append(element('small',`${p.id} · ${p.skill_tree||'—'} · ${[gatesFor(p).GATE1?'GATE1':'',gatesFor(p).GATE2?'GATE2':''].filter(Boolean).join(' / ')||'게이트 없음'}`));
+  root.append(box);
+ }
+}
+
+function updateAiStages(){
+ const selected=$('aiStage').value;
+ const profile=profiles.find(p=>p.id===$('aiProfile').value);
+ const tree=trees.find(t=>t.id===profile?.skill_tree);
+ const stages=[{id:'ALL',name:'전체 스킬 사용 단계'},...(tree?.stages||[]).filter(st=>!['SESSION','GATE1','GATE2','COMPLETE'].includes(st.id)&&stageInScope(profile,st.id))];
+ options($('aiStage'),stages);
+ if(stages.some(st=>st.id===selected))$('aiStage').value=selected;
+ else $('aiStage').value='ALL';
+}
+function useAiSkillContext(){
+ const profile=profiles.find(p=>p.id===$('aiProfile').value);
+ if(!profile){msg('프로필을 먼저 선택하세요.');return}
+ const tree=trees.find(t=>t.id===profile.skill_tree);
+ const stage=tree?.stages.find(x=>x.id===$('aiStage').value);
+ if(!stage){msg('전체 단계 추천인 경우, 추천 목록에서 개별 단계를 선택하세요.');return}
+ show('trees');$('treeSelect').value=tree.id;showTree();$('skillStage').value=stage.id;drawStageSkills();drawTreeOverview(tree);
+ msg('스킬 트리의 '+stage.id+' 단계가 선택되었습니다. 설치된 스킬을 연결한 뒤 저장하세요.');
+}
+const stageSequence=['SESSION','ANALYZE','PLAN','GATE1','IMPLEMENT','BUG_FAIL','VERIFY','REVIEW','REVIEW_FIX','GATE2','COMPLETE'];
+const stageTerminals=['ANALYZE','PLAN','GATE1','IMPLEMENT','VERIFY','REVIEW','GATE2','COMPLETE'];
+function profileStageLabel(p,id){return p?.stage_labels?.[id]||id;}
+const stageDescriptions={ANALYZE:'요구사항·근거 분석',PLAN:'계획 문서 작성',GATE1:'사용자 계획 승인',IMPLEMENT:'구현·전문 산출물 작성',VERIFY:'산출물 독립 검증',REVIEW:'독립 품질 리뷰',GATE2:'사용자 최종 승인',COMPLETE:'완료·인계 기록'};
+function stagePrerequisiteMessages(stageIds){
+ const set=new Set(stageIds),issues=[];
+ if(set.has('VERIFY')&&!['ANALYZE','PLAN','IMPLEMENT'].some(x=>set.has(x)))issues.push('VERIFY_REQUIRES_ARTIFACT_STAGE: VERIFY를 실행하려면 검증할 산출물이 있어야 합니다. 현재 ANALYZE·PLAN·IMPLEMENT 단계가 모두 미사용입니다. 이전 작업 산출물이 있다면 그 경로와 검증 근거를 명시해야 합니다.');
+ if(set.has('REVIEW')&&!set.has('VERIFY'))issues.push('REVIEW_NEEDS_VERIFICATION_EVIDENCE: REVIEW에 필요한 검증 결과가 선택된 단계에 없습니다. 이전 VERIFY의 증거가 없다면 실행할 수 없습니다.');
+ if(set.has('GATE2')&&!set.has('REVIEW'))issues.push('GATE2_NEEDS_REVIEW_EVIDENCE: Gate 2 승인 전에는 독립 리뷰 결과와 사용자의 명시적인 승인 기록이 필요합니다.');
+ if(set.has('IMPLEMENT')&&set.has('PLAN')&&!set.has('GATE1'))issues.push('IMPLEMENT_APPROVED_PLAN_REQUIRED: 구현 전 사용자가 승인한 계획이 필요합니다. Gate 1이 미사용이어도 이전 승인 기록을 확인해야 합니다.');
+ if(set.has('GATE1')&&!set.has('PLAN'))issues.push('GATE1_NO_PLAN_IN_PROFILE: Gate 1 승인을 위해 앞선 작업의 계획 문서를 명시해야 합니다.');
+ return issues;
+}
+function selectedStages(p){
+ if(Array.isArray(p?.enabled_stages))return p.enabled_stages;
+ const cutoff=stageSequence.indexOf(p?.stop_after_stage||'COMPLETE');
+ const g=p?.approval_gates||{GATE1:true,GATE2:true};
+ return stageTerminals.filter(id=>stageSequence.indexOf(id)<=cutoff&&(!id.startsWith('GATE')||g[id]));
+}
+function branchesFor(p){return p?.conditional_stages||{BUG_FAIL:true,REVIEW_FIX:true}}
+function stopAfter(p){return selectedStages(p).slice(-1)[0]||'없음'}
+function stageInScope(p,id){
+ if(id==='SESSION')return true;
+ if(id==='BUG_FAIL')return !!branchesFor(p).BUG_FAIL&&selectedStages(p).some(x=>['ANALYZE','PLAN','IMPLEMENT','VERIFY'].includes(x));
+ if(id==='REVIEW_FIX')return !!branchesFor(p).REVIEW_FIX&&selectedStages(p).includes('REVIEW');
+ return selectedStages(p).includes(id);
+}
+function gatesFor(p){return {GATE1:selectedStages(p).includes('GATE1'),GATE2:selectedStages(p).includes('GATE2')}}
+async function updateStageEnabled(profileId,id,enabled){
+ const p=profiles.find(x=>x.id===profileId);
+ if(!p)throw Error('Profile을 찾을 수 없습니다.');
+ if(p.id==='development'){msg('레거시 Profile은 수정할 수 없습니다.');return;}
+ const updated=JSON.parse(JSON.stringify(p));
+ if(['BUG_FAIL','REVIEW_FIX'].includes(id)){
+   updated.conditional_stages={...branchesFor(p),[id]:enabled};
+ }else{
+   const set=new Set(selectedStages(p));
+   enabled?set.add(id):set.delete(id);
+   updated.enabled_stages=stageTerminals.filter(x=>set.has(x));
+   updated.approval_gates={GATE1:set.has('GATE1'),GATE2:set.has('GATE2')};
+ }
+ const label=profileStageLabel(p,id);
+ const suffix='\n\n다른 단계의 사용 설정은 변경하지 않습니다. 실행에 필요한 산출물·승인 증거는 별도로 확인합니다.';
+ if(!await uiConfirm(`${p.name}의 ${label} 단계를 ${enabled?'사용':'미사용'}으로 저장할까요?${suffix}\n\n기존 TASK 계약은 변경되지 않습니다.`)){
+   drawTreeOverview(studioTree());return;
+ }
+ const saved=trees.find(t=>t.id===p.skill_tree);
+ if(saved&&JSON.stringify(treeParsed())!==JSON.stringify(saved)&&!await uiConfirm('저장하지 않은 스킬 변경을 버리고 계속할까요?')){drawTreeOverview(studioTree());return;}
+ try{await api('/api/profile/save',updated);await refresh();const warnings=stagePrerequisiteMessages(updated.enabled_stages||selectedStages(updated));msg(label+' 단계 설정 저장 완료 (다른 단계 변경 없음)'+(warnings.length?'\n\n실행 전 확인 필요:\n- '+warnings.join('\n- '):''));}
+ catch(e){await refresh();msg('단계 변경 불가: '+e.message);}
+}
+async function setStageScope(profileId,targetStage){return updateStageEnabled(profileId,targetStage,true)}
+async function setGateSetting(profileId,gate,enabled){return updateStageEnabled(profileId,gate,enabled)}
+function showProfileEditor(){const x=profiles.find(p=>p.id===$('profileEditSelect').value);$('profileText').value=x?JSON.stringify(x,null,2):''}
+async function saveProfile(){try{const p=JSON.parse($('profileText').value);if(p.id!==$('profileEditSelect').value)throw Error('Profile ID cannot be changed');await api('/api/profile/save',p);msg('Profile 저장 완료');await refresh()}catch(e){msg('저장 차단: '+e.message)}}
+document.querySelectorAll('input[name="profileMode"]').forEach(n=>n.addEventListener('change',()=>{document.getElementById('wizardCloneRow').hidden=document.querySelector('input[name="profileMode"]:checked').value!=='clone'}));
+async function createProfileGuided(){const name=$('newProfileName').value.trim(),id=$('newProfileId').value.trim();if(!name||!id){msg('프로필 이름과 영문 ID를 입력하세요.');return}try{const mode=document.querySelector('input[name="profileMode"]:checked').value;if(!await uiConfirm(name+' 프로필을 생성할까요? 현재 활성 프로필은 변경되지 않습니다.'))return;const result=mode==='clone'?await api('/api/profile/clone',{source:$('wizardCloneSource').value,id,name}):await api('/api/profile/create',{id,name});msg('새 프로필 생성 완료. 스킬 트리에서 단계별 스킬을 연결하세요.');await refresh();show('trees');$('treeSelect').value=result.skill_tree;showTree()}catch(e){msg('프로필 생성 실패: '+e.message)}}
+function drawContextRegistry(){
+  const sessions=$('contextSessions'), tasks=$('contextTasks');
+  clear(sessions);clear(tasks);
+  const rows=state?.session_defaults||[];
+  if(!rows.length)sessions.append(element('p','세션별 기본값이 없습니다. 신규 TASK는 프로젝트 기본값을 사용합니다.','muted'));
+  for(const x of rows){
+    const div=element('div',undefined,'dashboard-task-row');
+    div.append(element('span',x.host+' · '+x.session_id.slice(0,22)+'… · 현재 '+x.profile+' (v'+x.generation+') · '+(x.discovery==='NATIVE_HOOK_REPORTED'?'Hook에서 발견':'수동 설정')));
+    const choice=document.createElement('select');choice.setAttribute('aria-label',x.session_id+' 신규 TASK Profile');
+    for(const p of profiles){const opt=element('option',p.name||p.id);opt.value=p.id;choice.append(opt)}
+    choice.value=x.profile;
+    const button=element('button','다음 TASK부터 적용','primary');
+    button.onclick=async()=>{try{await api('/api/session-profile/bind',{session_id:x.session_id,host:x.host,profile:choice.value,generation:x.generation});msg('해당 세션의 다음 신규 TASK Profile이 변경되었습니다.');await refresh()}catch(e){msg(e.message)}};
+    div.append(choice,button);sessions.append(div)
+  }
+  const active=state?.task_contexts||[];
+  if(!active.length)tasks.append(element('p','진행 중인 TASK가 없습니다.','muted'));
+  for(const x of active){let div=element('div',x.task_id+' · '+x.state+' · '+(x.profile||'계약 미지정')+' · '+(x.session_id||'세션 미지정')+(x.contract_pinned?' · 고정됨':' · 계약 고정 필요'),'dashboard-task-row');tasks.append(div)}
+}
+async function bindContextSession(){
+ const session_id=$('contextSessionId').value.trim(),host=$('contextHost').value,profile=$('contextProfile').value;
+ if(!session_id||!profile){msg('세션 ID와 Profile을 지정하세요');return}
+ try{await api('/api/session-profile/bind',{session_id,host,profile});msg('세션 기본 Profile 저장 완료 — 해당 세션의 신규 TASK에만 적용');await refresh()}catch(e){msg(e.message)}
+}
+function drawProfiles(){const root=$('profileCards');clear(root);for(const p of profiles){const line=element('div',undefined,'profile-card'+(p.id===state.active_profile.profile?' active-profile':''));const detail=element('div',undefined,'profile-info');detail.append(element('b',p.name||p.id),document.createTextNode(' '),statusBadge(p.id===state.active_profile.profile?'활성':'사용 가능',p.id===state.active_profile.profile?'ok':'neutral'));detail.append(element('p','ID: '+p.id+' · Agent: '+p.primary_agent+' · Tree: '+p.skill_tree));if(p.description)detail.append(element('p',p.description));if(p.preinstalled)detail.append(statusBadge('기본 제공','neutral'));
+const gateSummary=element('small','선택 단계: '+selectedStages(p).join(' → ')+' · Gate 1: '+(gatesFor(p).GATE1?'활성':'비활성')+' · Gate 2: '+(gatesFor(p).GATE2?'활성':'비활성')+' — 단계별 흐름에서 변경','explain');
+detail.append(gateSummary);
+const btn=element('button',p.id===state.active_profile.profile?'현재 사용 중':'이 프로필 활성화',p.id===state.active_profile.profile?'':'primary');btn.disabled=p.id===state.active_profile.profile;btn.title='프로젝트 기본값만 변경합니다. 기존 TASK는 변경되지 않습니다.';btn.onclick=async()=>{if(!await uiConfirm(p.name+' 프로필을 프로젝트 기본값으로 설정할까요? 기존 TASK는 변경되지 않습니다.'))return;try{await api('/api/profile/activate',{profile:p.id,generation:state.active_profile.generation});msg('Profile 적용 완료 — 다음 작업부터 사용');await refresh()}catch(e){msg(e.message)}};line.append(detail,btn);root.append(line)}}
+function drawSkills(){const search=$('skillSearch').value.trim().toLowerCase();const results=skills.filter(s=>s.name.toLowerCase().includes(search));const table=document.createElement('table'),head=document.createElement('tr');for(const h of ['스킬 이름','파일 무결성','네이티브 로딩','검증 설명'])head.append(element('th',h));table.append(head);for(const s of results){const tr=document.createElement('tr');const integrity=skillState(s);const td=element('td');td.append(statusBadge(integrity[0],integrity[1]));const native=element('td');native.append(statusBadge('미확인','warning'));native.append(element('small','실제 로딩은 별도 실행 증거 필요','explain'));const reason=element('td',s.reason==='HASH_VERIFIED_NOT_NATIVE_LOADED'?'설치 파일 해시 일치 · 실제 스킬 호출은 별도 확인 필요':s.reason||'설명 없음');tr.append(element('td',s.name),td,native,reason);table.append(tr)}if(!results.length){const tr=element('tr'),td=element('td','해당 이름의 스킬이 없습니다.');td.colSpan=4;tr.append(td);table.append(tr)}$('skillsTable').replaceChildren(table)}
+function drawAgents(){const root=$('agentsGrid');clear(root);const descriptions={coordinator:'기본 에이전트 · 작업 분석/계획 및 전체 단계 조정',implementer:'구현 담당 · TDD 및 리뷰 수정',verifier:'독립 검증 · 테스트 증거',reviewer:'독립 리뷰 · 코드 및 결과 검토',improver:'완료 후 개선 보고 · 자동 수정 없음'};for(const role of Object.keys(descriptions)){const d=element('div',undefined,'card');d.append(element('h2',role),element('p',descriptions[role]),statusBadge(role==='coordinator'?'기본 에이전트':'네이티브 Worker',role==='coordinator'?'ok':'neutral'));root.append(d)}}
+function studioProfile(){return profiles.find(p=>p.skill_tree===$('treeSelect').value)}
+function studioTree(){try{return JSON.parse($('treeText').value)}catch(e){return null}}
+function studioDirtyCheck(){const t=studioTree(),saved=trees.find(x=>x.id===t?.id),dirty=!!t&&!!saved&&JSON.stringify(t)!==JSON.stringify(saved);$('studioDirty').textContent=dirty?'스킬 변경 미저장':'스킬 설정 저장됨';$('studioDirty').classList.toggle('dirty',dirty);return dirty}
+async function changeTreeSelection(){if(window.studioPriorTree&&window.studioPriorTree!==$('treeSelect').value&&studioDirtyCheck()&&!await uiConfirm('저장하지 않은 스킬 연결 변경을 버리고 다른 프로필로 이동할까요?')){$('treeSelect').value=window.studioPriorTree||$('treeSelect').value;return}showTree()}
+function studioPickStage(id){const box=$('skillStage');if(Array.from(box.options).some(o=>o.value===id)){box.value=id;drawStageSkills();drawTreeOverview(studioTree())}}
+function drawStudioFlow(tree,p){const root=$('studioFlow');clear(root);const stages=['SESSION',...stageTerminals],chosen=$('skillStage').value;for(const id of stages){const auto=id==='SESSION',active=auto||selectedStages(p).includes(id),node=element('button',undefined,'studio-flow-item'+(active?' active':'')+(chosen===id?' chosen':'')+(auto?' auto':''));node.type='button';node.disabled=auto;node.append(element('span',auto?'◈':active?'●':'○','studio-flow-icon'),element('b',profileStageLabel(p,id)),element('small',auto?'자동 실행':active?'사용':'미사용'),element('span',auto?'🔒':active?'✓':'○','flow-dot'));if(!auto)node.onclick=()=>studioPickStage(id);root.append(node)}}
+function drawStudioBranches(tree,p){const root=$('studioBranches');clear(root);root.append(element('strong','조건부 단계'));for(const id of ['BUG_FAIL','REVIEW_FIX']){const item=element('label',undefined,'studio-branch'),cb=document.createElement('input');cb.type='checkbox';cb.checked=!!branchesFor(p)[id];cb.disabled=!p||p.id==='development'||Boolean(state?.tasks?.length);cb.setAttribute('aria-label',id+' 조건부 실행 허용');cb.onchange=()=>updateStageEnabled(p.id,id,cb.checked);item.append(cb,element('span',id+' · '+(id==='BUG_FAIL'?'오류 발생':'리뷰 수정 요청')));if(id==='REVIEW_FIX'&&!selectedStages(p).includes('REVIEW'))item.title='REVIEW를 사용하지 않으면 설정이 켜져 있어도 실행하지 않습니다';root.append(item)}}
+function drawStudioLibrary(){const root=$('studioLibraryList');if(!root)return;clear(root);const query=$('studioSkillSearch').value.toLowerCase().trim(),filter=$('studioSkillFilter').value;const tree=studioTree(),st=tree?.stages.find(s=>s.id===$('skillStage').value);const linked=new Set((st?.skills||[]).map(s=>s.name));const all=skills.filter(s=>(s.name.toLowerCase().includes(query)||String(s.description||'').toLowerCase().includes(query))&&(filter==='all'||filter==='installed'&&s.verified||filter==='unverified'&&!s.verified||filter==='unlinked'&&!linked.has(s.name)));$('studioLibraryTotal').textContent=all.length+'개';for(const skill of all){const item=element('div',undefined,'studio-library-item');const head=element('div',undefined,'studio-library-title');head.append(element('strong',skill.name),statusBadge(skill.verified?'검증됨':'확인 필요',skill.verified?'ok':'warning'));item.append(head);item.append(element('small',skill.description||skill.reason||'설치된 프로젝트 스킬'));const b=element('button',linked.has(skill.name)?'연결됨':'선택 단계에 추가','slim');b.disabled=linked.has(skill.name)||!st||['GATE1','GATE2','COMPLETE','SESSION'].includes(st.id)||!stageInScope(studioProfile(),st.id)||Boolean(state?.tasks?.length);b.onclick=()=>{ $('skillToAdd').value=skill.name;addSkillToTree() };item.append(b);root.append(item)}if(!all.length)root.append(element('div','검색 결과가 없습니다.','studio-no-skills'))}
+
+function showTree(){const x=trees.find(t=>t.id===$('treeSelect').value);$('treeText').value=x?JSON.stringify(x,null,2):'';window.studioPriorTree=$('treeSelect').value;updateStageSkillList()}
+function updateStageSkillList(){try{const tree=JSON.parse($('treeText').value);const selected=$('skillStage').value,box=$('skillStage');const profile=profiles.find(p=>p.skill_tree===tree.id);clear(box);for(const st of tree.stages){if(st.id==='SESSION')continue;const o=element('option',st.id);o.value=st.id;box.append(o)}if(Array.from(box.options).some(x=>x.value===selected))box.value=selected;drawStageSkills();drawTreeOverview(tree);studioDirtyCheck()}catch(e){clear($('stageSkillList'));clear($('treeStageOverview'));clear($('studioFlow'));clear($('studioBranches'))}}
+function drawTreeOverview(tree){if(!tree)return;const root=$('treeStageOverview');clear(root);const profile=profiles.find(p=>p.skill_tree===tree.id);const locked=!profile||profile.id==='development',busy=Boolean(state?.tasks?.length),current=$('skillStage').value;drawStudioFlow(tree,profile);drawStudioBranches(tree,profile);$('studioStageCount').textContent=selectedStages(profile).length+'/8 사용';$('studioFlowSummary').textContent='SESSION (자동) → '+(selectedStages(profile).join(' → ')||'선택 단계 없음');for(const id of stageTerminals){const st=tree.stages.find(x=>x.id===id);if(!st)continue;const active=stageInScope(profile,id),isSystem=['GATE1','GATE2','COMPLETE'].includes(id),row=element('div',undefined,'studio-stage-row'+(active?' active':'')+(current===id?' chosen':''));const copy=element('div',undefined,'stage-copy');copy.append(element('b',profileStageLabel(profile,id)+' · '+(stageDescriptions[id]||'')),element('small',isSystem?'시스템·승인 단계 · 스킬 없음':st.skills.map(s=>s.name).join(' · ')||'연결된 스킬 없음'));const cb=document.createElement('input');cb.type='checkbox';cb.checked=active;const workerGate=false;cb.disabled=locked||busy;cb.title=busy?'진행 중인 TASK 계약 보호':'';cb.setAttribute('aria-label',id+' 단계 사용');if(profile?.id==='development-worker'&&['GATE1','GATE2'].includes(id))copy.append(element('small','선택 가능 · 승인 자체는 반드시 사용자가 수행합니다.','studio-stage-warning'));cb.onclick=ev=>ev.stopPropagation();cb.onchange=ev=>{ev.stopPropagation();updateStageEnabled(profile.id,id,cb.checked)};row.append(copy,element('span',isSystem?'시스템':st.skills.length+'개 스킬','stage-skills'),cb);row.onclick=()=>studioPickStage(id);root.append(row)}}
+function drawStageSkills(){try{const tree=studioTree(),st=tree?.stages.find(x=>x.id===$('skillStage').value),root=$('stageSkillList');clear(root);const intro=$('studioSelectedIntro');clear(intro);$('studioSelectedStage').textContent=st?profileStageLabel(studioProfile(),st.id):'선택 대기';if(!st){intro.append(element('b','스킬을 연결할 활성 단계를 선택하세요'));$('stageEditControls').hidden=true;drawStudioLibrary();return}const p=studioProfile(),active=stageInScope(p,st.id);intro.append(element('b',profileStageLabel(p,st.id)+' · '+(stageDescriptions[st.id]||'조건부 단계')),element('p','담당 Agent: '+st.agent+' · '+st.skills.length+'개 스킬 연결 · '+(active?'실행 허용':'실행 범위 밖')));$('stageEditControls').hidden=!active||['GATE1','GATE2','COMPLETE'].includes(st.id);for(const skill of st.skills){const line=element('div',undefined,'studio-linked-item'),head=element('div',undefined,'studio-linked-head');head.append(element('b',skill.name),statusBadge(skill.required?'필수':'선택',skill.required?'warning':'neutral'));line.append(head,element('small','실행 조건: '+skill.condition+' · 설치 무결성: '+(skills.find(s=>s.name===skill.name)?.verified?'검증됨':'확인 필요')));const controls=element('div',undefined,'button-row');const toggle=element('button',skill.required?'선택으로 변경':'필수로 변경','slim');toggle.disabled=p?.id==='development'||Boolean(state?.tasks?.length);toggle.onclick=()=>{const t=treeParsed(),target=t.stages.find(s=>s.id===st.id).skills.find(s=>s.name===skill.name);target.required=!target.required;target.condition=target.required?'always':'optional';$('treeText').value=JSON.stringify(t,null,2);updateStageSkillList()};const remove=element('button','연결 해제','slim');remove.disabled=Boolean(state?.tasks?.length);remove.onclick=()=>{const t=treeParsed();t.stages.find(s=>s.id===st.id).skills=t.stages.find(s=>s.id===st.id).skills.filter(s=>s.name!==skill.name);$('treeText').value=JSON.stringify(t,null,2);updateStageSkillList()};controls.append(toggle,remove);line.append(controls);root.append(line)}if(!st.skills.length)root.append(element('div','연결된 스킬이 없습니다. 오른쪽 라이브러리에서 선택하세요.','studio-no-skills'));drawStudioLibrary()}catch(e){msg('단계 편집 오류: '+e.message)}}
+$('skillStage').addEventListener('change',()=>{drawStageSkills();drawTreeOverview(studioTree())});
+function addSkillToTree(){try{const tree=treeParsed();const st=tree.stages.find(x=>x.id===$('skillStage').value);if(!st)throw Error('단계를 선택하세요');if(['SESSION','GATE1','GATE2','COMPLETE'].includes(st.id))throw Error('시스템 및 승인 단계에는 스킬을 배정할 수 없습니다.');const name=$('skillToAdd').value;if(!name)throw Error('스킬을 선택하세요');if(st.skills.some(x=>x.name===name))throw Error('이미 연결된 스킬입니다');const cond=$('skillCondition').value;st.skills.push({name,required:cond==='always',condition:cond});$('treeText').value=JSON.stringify(tree,null,2);updateStageSkillList();msg('Skill 연결 초안 추가 — 저장해야 적용됩니다')}catch(e){msg(e.message)}}
+function treeParsed(){const t=JSON.parse($('treeText').value);if(t.id!==$('treeSelect').value)throw Error('Tree ID cannot be changed');return t}
+function validateTree(){try{const t=treeParsed();const ids=t.stages.map(x=>x.id);if(new Set(ids).size!==ids.length)throw Error('중복 단계');msg('JSON 및 단계 중복 확인 완료 (서버 정책 검사는 저장 시 수행)')}catch(e){msg('검사 실패: '+e.message)}}
+async function saveTree(){try{const t=treeParsed();await api('/api/tree/save',t);msg('Skill Tree 저장 완료');await refresh()}catch(e){msg('저장 차단: '+e.message)}}
+async function addTemplate(){try{const id=$('templateSelect').value;if(!id)throw Error('템플릿을 선택하세요');await api('/api/profile/template',{template:id});msg('템플릿 추가 완료');await refresh()}catch(e){msg('추가 차단: '+e.message)}}
+async function cloneProfile(){try{await api('/api/profile/clone',{source:$('cloneSource').value,id:$('cloneId').value,name:$('cloneLabel').value});msg('Profile 복제 완료');await refresh()}catch(e){msg(e.message)}}
+async function loadAdvisorRuns(preferred){
+ try{
+  const runs=await api('/api/ai/runs');const select=$('advisorRuns');const previous=preferred||select.value;
+  clear(select);for(const run of runs){const opt=element('option',run.run_id+' · '+run.status+' · '+run.profile);opt.value=run.run_id;select.append(opt)}
+  if(runs.some(x=>x.run_id===previous))select.value=previous;
+  if(runs.length)await loadAdvisorTrace();else $('advisorTraceView').textContent='저장된 실행 로그가 없습니다.';
+ }catch(e){$('advisorTraceView').textContent='이력 조회 실패: '+e.message}
+}
+async function loadAdvisorTrace(){
+ const id=$('advisorRuns').value;if(!id){$('advisorTraceView').textContent='실행을 선택하세요.';return}
+ try{const run=await api('/api/ai/run?id='+encodeURIComponent(id));
+  $('advisorTraceView').textContent=JSON.stringify(run,null,2);
+ }catch(e){$('advisorTraceView').textContent='상세 로그 조회 실패: '+e.message}
+}
+let aiSuggestInFlight=false;
+function setAiSuggestState(state, label){
+ const button=$('aiSuggestButton'), status=$('aiSuggestStatus');
+ button.disabled=state==='running';
+ button.textContent=state==='running'?'추천 검색 진행 중…':'AI에게 스킬 추천 요청';
+ button.setAttribute('aria-busy',String(state==='running'));
+ status.className='ai-suggest-status'+(state==='running'?' running':state==='done'?' done':state==='failed'?' failed':'');
+ status.textContent=label;
+}
+async function suggestSkills(){
+ if(aiSuggestInFlight)return;
+ const q=$('aiQuestion').value.trim();
+ if(!q){msg('추천할 내용이나 키워드를 입력하세요. 예: 분석, UI, 검증');return}
+ aiSuggestInFlight=true;
+ setAiSuggestState('running','진행 중 · 스킬 후보를 검색하고 있습니다.');
+ lastAiRecommendation=null;$('aiCandidatePanel').hidden=true;$('aiNextSteps').hidden=true;
+ $('aiResult').textContent='요청을 접수했습니다. 에이전트 응답과 외부 검색을 진행 중입니다…';
+ try{
+    const j=await api('/api/ai/suggest',{host:$('aiHost').value,question:q,profile:$('aiProfile').value,stage:$('aiStage').value,search_external:$('aiExternalSearch').checked});
+    lastAiRecommendation=j;
+    $('aiResult').textContent='대상: '+j.profile+' / '+j.stage+'\n\n'+(j.summary||'')+'\n\n--- AI 응답 원문 (검증되지 않은 제안) ---\n'+j.suggestion;
+    renderAiCandidates(j);
+    $('advisorAssessment').textContent='실행 ID: '+(j.run_id||'없음')+' · 자동 평가는 예비 판정이며 실제 실행 품질 검증이 아닙니다.';
+    // History errors must not turn a successful recommendation into a failed run.
+    void loadAdvisorRuns(j.run_id);
+    if(j.external_search?.status==='SEARCH_UNAVAILABLE')msg('GitHub 검색 불가: LLM 제안과 로컬 결과만 표시합니다.');
+    $('aiNextSteps').hidden=false;
+    setAiSuggestState('done','완료 · 추천 결과를 확인하세요.');
+    msg('추천 완료 — 로컬 스킬은 승인 후 연결, 외부는 소스 검사가 필요합니다.');
+ }catch(e){
+    $('aiResult').textContent='추천 실행 실패: '+e.message;
+    setAiSuggestState('failed','실패 · '+e.message);
+    msg(e.message);
+ }finally{
+    aiSuggestInFlight=false;
+    $('aiSuggestButton').disabled=false;
+ }
+}
+
+function renderAiCandidates(j){
+ const root=$('aiCandidateList');clear(root);
+ const candidates=j.recommendations||[];
+ $('aiCandidatePanel').hidden=false;
+ if(!candidates.length){root.append(element('p','구조화된 후보가 없습니다. 아래 AI 원문을 검토한 뒤 재요청하거나 스킬을 직접 가져오세요.'));return}
+ candidates.forEach((c,index)=>{
+  const card=element('div',undefined,'stage-card');
+  const row=element('div',undefined,'button-row');
+  if(c.origin==='local'&&c.verified){const check=document.createElement('input');check.type='checkbox';check.style.width='auto';check.id='aiPick'+index;check.dataset.index=String(index);check.setAttribute('aria-label',c.name+' '+c.stage+' 연결 선택');row.append(check)}
+  row.append(element('b',c.name+' · '+c.stage),statusBadge(c.origin==='local'?'로컬 파일 검증':c.source_status==='GITHUB_REPO_PATH_PIN_VERIFIED_NOT_AUDITED'?'저장소·경로 확인 (보안 미검사)':'외부 출처 미검증',c.origin==='local'?'ok':'warning'));
+  if(c.assessment){const v=c.assessment.verdict;card.append(element('p','적합성 예비 판정: '+v+' · '+c.assessment.reason,'hint'));}
+  card.append(row);
+  if(c.origin==='external'){
+   const desc=element('p',c.description||'SKILL.md에 확인 가능한 설명이 없습니다. 원본 파일을 확인하세요.');
+   desc.className='skill-summary';card.append(desc);
+   card.append(element('p','추천 근거: '+(c.reason||'단계별 키워드 검색 결과')+' · 실제 단계 적합성은 별도 검토 필요','hint'));
+  }else{card.append(element('p',c.reason||'추천 사유 없음'))}
+
+  if(c.origin==='external'){
+   const detail=element('small',c.url ? 'AI 제안 저장소: '+c.url+' · Commit: '+(c.commit||'미확인')+' · 경로: '+(c.subdir||'미확인') : 'Git URL·고정 Commit·SKILL.md 경로를 먼저 확인해야 합니다.');card.append(detail);
+   const repoMatch=typeof c.url==='string'&&c.url.match(/^https:\/\/github\.com\/([A-Za-z0-9_.-]+)\/([A-Za-z0-9_.-]+?)(?:\.git)?$/);
+   if(repoMatch){
+    const repo='https://github.com/'+repoMatch[1]+'/'+repoMatch[2];
+    for(const [title,url] of [['GitHub 저장소 보기',repo],['SKILL.md 원본 보기',/^[a-f0-9]{40}$/i.test(c.commit||'')&&typeof c.subdir==='string'&&!c.subdir.split('/').includes('..')?repo+'/blob/'+c.commit+'/'+c.subdir+'/SKILL.md':'']]){
+     if(!url)continue;
+     const a=document.createElement('a');a.textContent=title;a.href=url;a.target='_blank';a.rel='noopener noreferrer';a.className='skill-source-link';card.append(a);
+    }
+   }
+   const button=element('button','Git 소스 검사 화면으로 이동');button.onclick=()=>{
+
+    show('skills');setGitCandidate(c.url,c.commit,c.subdir);
+    $('gitUrl').scrollIntoView({behavior:'smooth',block:'center'});msg(c.commit&&/^[a-fA-F0-9]{40}$/.test(c.commit)?'추천 결과의 고정 Commit을 입력했습니다. 원본을 확인한 후 Git 소스 검사를 진행하세요.':'고정 Commit이 없습니다. GitHub 최신 Commit을 조회하거나 40자리 SHA를 입력하세요.');
+   };card.append(button)
+  }
+  root.append(card);
+ });
+}
+async function applyAiLocal(){
+ try{
+  const j=lastAiRecommendation;if(!j)throw Error('먼저 AI 추천을 요청하세요.');
+  const assignments=[...$('aiCandidateList').querySelectorAll('input[type="checkbox"]:checked')].map(x=>j.recommendations[Number(x.dataset.index)]).filter(x=>x.origin==='local'&&x.verified).map(x=>({name:x.name,stage:x.stage}));
+  if(!assignments.length)throw Error('연결할 로컬 스킬을 선택하세요.');
+  if(!await uiConfirm(j.profile+' 프로필의 다음 단계에 스킬을 연결할까요?\n'+assignments.map(x=>x.stage+' → '+x.name).join('\n')+'\n진행 중인 TASK가 있으면 차단됩니다.'))return;
+  const result=await api('/api/ai/apply-local',{profile:j.profile,assignments,approved:true});
+  msg('연결 완료: '+result.connected.length+'건 · 기존 연결: '+result.already_connected+'건. 네이티브 로딩은 별도 검증 필요.');
+  await refresh();
+ }catch(e){msg('스킬 연결 실패: '+e.message)}
+}
+
+async function removeSkill(){const name=$('removeSkillName').value;if(!await uiConfirm(name+' 스킬을 프로젝트에서 제거할까요? 사용자 변경 파일은 보호됩니다.'))return;try{await api('/api/skill/remove',{name,approved:true});msg('스킬 제거 완료');await refresh()}catch(e){msg('제거 차단: '+e.message)}}
+function resetZipPreview(){inspectedZip=null;$('uploadInstallBtn').disabled=true;$('zipUploadPreview').textContent='파일 검사 전입니다.'}
+function readZipBase64(file){return new Promise((resolve,reject)=>{const fr=new FileReader();fr.onload=()=>resolve(String(fr.result).split(',')[1]);fr.onerror=()=>reject(Error('ZIP 파일을 읽지 못했습니다.'));fr.readAsDataURL(file)})}
+async function inspectZipFile(){resetZipPreview();try{const file=$('skillZipFile').files[0];if(!file)throw Error('ZIP 파일을 먼저 선택하세요.');if(file.size>30_000_000)throw Error('ZIP 최대 크기는 30MB입니다.');const archive_base64=await readZipBase64(file);const result=await api('/api/skill/upload/inspect',{archive_base64});inspectedZip={file,archive_base64,archive_sha256:result.archive_sha256};$('zipUploadPreview').textContent=JSON.stringify({name:result.name,file_count:result.file_count,size:result.size,files:result.files_sha256,security_review:result.security_review},null,2);$('uploadInstallBtn').disabled=false;msg('압축파일 분석 완료. 내용과 파일 목록을 검토하세요.')}catch(e){msg('ZIP 검사 실패: '+e.message)}}
+async function installZipFile(){try{const selected=$('skillZipFile').files[0];if(!inspectedZip||selected!==inspectedZip.file)throw Error('파일을 다시 검사하세요.');if(!await uiConfirm('ZIP 파일의 출처와 파일 목록을 검토했습니까? '+selected.name+'을 설치할까요?'))return;const result=await api('/api/skill/upload/install',{archive_base64:inspectedZip.archive_base64,archive_sha256:inspectedZip.archive_sha256,approved:true});resetZipPreview();$('zipUploadPreview').textContent=JSON.stringify(result,null,2);msg('ZIP 스킬 설치 완료. 이제 스킬 트리 단계에 연결하세요.');await refresh()}catch(e){msg('ZIP 설치 차단: '+e.message)}}
+function getCreatedSkillPayload(){return {name:$('createdSkillName').value.trim(),description:$('createdSkillDescription').value.trim(),instructions:$('createdSkillInstructions').value.trim()}}
+async function inspectCreatedSkill(){inspectedCreated=null;$('createdSkillInstallBtn').disabled=true;try{const payload=getCreatedSkillPayload();const result=await api('/api/skill/create/inspect',payload);inspectedCreated=JSON.stringify(payload);$('createdSkillPreview').textContent=result.preview;$('createdSkillInstallBtn').disabled=false;msg('SKILL.md 미리보기를 확인하고 설치를 승인하세요.')}catch(e){msg('미리보기 실패: '+e.message)}}
+async function installCreatedSkill(){const payload=getCreatedSkillPayload();if(!inspectedCreated||inspectedCreated!==JSON.stringify(payload)){msg('내용이 변경됐습니다. 다시 미리보기를 확인하세요.');return}if(!await uiConfirm(payload.name+' 스킬 파일을 프로젝트 내부에 설치할까요?'))return;try{const result=await api('/api/skill/create/install',{...payload,approved:true});msg('스킬 생성·설치 완료. 스킬 트리에서 사용할 단계에 연결하세요.');$('createdSkillPreview').textContent=JSON.stringify(result,null,2);await refresh();$('createdSkillInstallBtn').disabled=true;inspectedCreated=null}catch(e){msg('설치 차단: '+e.message)}}
+async function resolveGitCommit(){
+ resetGitInspection('Commit을 조회하기 전입니다. Git 소스 검사는 아직 수행되지 않았습니다.');
+ const epoch=gitInspectionEpoch;
+ try{
+  const url=$('gitUrl').value.trim();
+  if(!url)throw Error('GitHub 저장소 URL을 먼저 입력하세요.');
+  if(!await uiConfirm('GitHub의 현재 기본 브랜치 Commit SHA를 조회할까요? 조회 후에도 Git 소스 검사·설치 승인은 별도로 필요합니다.'))return;
+  const result=await api('/api/skill/git/resolve',{url});
+  if(epoch!==gitInspectionEpoch||url!==$('gitUrl').value.trim())return;
+  $('gitCommit').value=result.commit;
+  $('gitPreview').textContent='조회된 고정 Commit: '+result.commit+'\n저장소: '+result.repository+'\n기본 브랜치: '+result.branch+'\n조회는 설치·보안 검증이 아닙니다.\n이제 하위 폴더 경로를 확인하고 Git 소스 검사를 실행하세요.';
+  msg('GitHub Commit SHA 조회 완료. SKILL.md 경로를 확인한 후 소스 검사하세요.');
+ }catch(e){if(epoch===gitInspectionEpoch)msg('Commit 조회 실패: '+e.message)}
+}
+async function inspectGit(){
+ resetGitInspection('Git 소스 검사 요청 중입니다. 아직 설치 승인을 할 수 없습니다.');
+ const epoch=gitInspectionEpoch;
+ try{
+  const payload={url:$('gitUrl').value.trim(),commit:$('gitCommit').value.trim(),subdir:$('gitSubdir').value.trim()};
+  if(!/^[a-fA-F0-9]{40}$/.test(payload.commit))throw Error('40자리 Commit SHA가 필요합니다. GitHub 저장소라면 ‘GitHub 최신 Commit SHA 조회’를 먼저 누르세요.');
+  if(!payload.subdir)throw Error('SKILL.md가 포함된 스킬 하위 폴더를 입력하세요.');
+  const j=await api('/api/skill/git/inspect',payload);
+  if(epoch!==gitInspectionEpoch||payload.url!==$('gitUrl').value.trim()||payload.commit!==$('gitCommit').value.trim()||payload.subdir!==$('gitSubdir').value.trim())return;
+  inspectedGit=payload;
+  $('installGitBtn').disabled=false;
+  $('gitPreview').textContent=JSON.stringify(j,null,2);
+  msg('Git 분석 완료. 파일 목록과 출처를 검토하세요');
+ }catch(e){if(epoch===gitInspectionEpoch){$('gitPreview').textContent='Git 소스 검사에 실패했습니다. 입력을 확인하고 다시 검사하세요.';msg('Git 분석 실패: '+e.message)}}
+}
+async function installGit(){if(!inspectedGit||inspectedGit.url!==$('gitUrl').value||inspectedGit.commit!==$('gitCommit').value||inspectedGit.subdir!==$('gitSubdir').value){msg('입력 내용이 바뀌었습니다. Git 소스를 다시 검사하세요.');return}if(!await uiConfirm('고정 Commit과 다운로드 파일을 검토했습니까? 프로젝트에 설치할까요?'))return;try{const j=await api('/api/skill/git/install',{url:$('gitUrl').value,commit:$('gitCommit').value,subdir:$('gitSubdir').value,approved:true});$('gitPreview').textContent=JSON.stringify(j,null,2);msg('Git 스킬 설치 완료. 연결 전 사용자 확인이 필요합니다.');await refresh();
+ if(lastAiRecommendation&&lastAiRecommendation.recommendations.some(x=>x.origin==='external'&&x.url===inspectedGit.url&&x.commit===inspectedGit.commit&&x.subdir===inspectedGit.subdir)){
+  const rows=lastAiRecommendation.recommendations.filter(x=>x.origin==='external'&&x.url===inspectedGit.url&&x.commit===inspectedGit.commit&&x.subdir===inspectedGit.subdir).map(x=>({name:j.name,stage:x.stage}));
+  if(rows.length&&await uiConfirm('설치된 '+j.name+' 스킬을 '+lastAiRecommendation.profile+'의 추천 단계에 연결할까요?')){
+   const linked=await api('/api/ai/apply-local',{profile:lastAiRecommendation.profile,assignments:rows,approved:true});msg('설치·연결 완료: '+linked.connected.length+'개 단계. 실제 네이티브 로딩은 미검증.');await refresh();
+  }
+ }}catch(e){msg('설치 실패: '+e.message)}}
+async function inspectSkill(){inspectedLocal=null;$('installSkillBtn').disabled=true;try{const payload={kind:$('sourceKind').value,source:$('sourcePath').value};const j=await api('/api/skill/inspect',payload);inspectedLocal=payload;$('installSkillBtn').disabled=false;$('skillPreview').textContent=JSON.stringify(j,null,2);msg('분석 완료 — 권한 및 포함된 스크립트를 직접 검토하세요')}catch(e){msg(e.message)}}
+async function installSkill(){if(!inspectedLocal||inspectedLocal.kind!==$('sourceKind').value||inspectedLocal.source!==$('sourcePath').value){msg('입력 내용이 바뀌었습니다. 소스를 다시 검사하세요.');return}if(!await uiConfirm('스킬 소스와 파일 목록을 검토했습니까? 프로젝트 내부에 설치할까요?'))return;try{const j=await api('/api/skill/install',{kind:$('sourceKind').value,source:$('sourcePath').value,approved:true});msg('설치 완료. 이제 스킬 트리에서 사용할 단계에 연결하세요.');$('skillPreview').textContent=JSON.stringify(j,null,2);await refresh()}catch(e){msg(e.message)}}
+async function loadContract(){try{const contract=await api('/api/contract');$('contractData').textContent=JSON.stringify(contract,null,2);const root=$('contractSummary');clear(root);for(const [title,value] of [['현재 프로필',contract.profile?.name||contract.profile?.id],['기본 Agent',contract.profile?.primary_agent],['Workflow',contract.profile?.workflow],['Skill Tree',contract.profile?.skill_tree],['네이티브 로딩',contract.native_skills_loaded||'NOT_VERIFIED'],['구성 SHA-256',contract.configuration_sha256||'']]){const card=element('div',undefined,'stage-card');card.append(element('small',title),element('b',value||'확인 안 됨'));root.append(card)}}catch(e){msg(e.message)}}
+async function refreshRotation(){
+ const task=$('rotationTaskId').value.trim();if(!task){msg('TASK ID를 입력하세요.');return}
+ try{const [status,events]=await Promise.all([api('/api/rotation/status?task_id='+encodeURIComponent(task)),api('/api/rotation/history?task_id='+encodeURIComponent(task))]);
+ $('rotationStatus').textContent=JSON.stringify(status,null,2);$('rotationHistory').textContent=JSON.stringify(events,null,2)}catch(e){msg('회전 조회 실패: '+e.message)}
+}
+async function refreshExecution(){try{const tasks=await api('/api/tasks');const root=$('executionTasks');clear(root);if(!tasks.length){root.append(element('p','진행 중인 작업이 없습니다. 완료된 TASK는 프로젝트의 docs/tasks/completed에서 확인하세요.'));return}const pre=element('pre',JSON.stringify(tasks,null,2));root.append(pre)}catch(e){msg('TASK 조회 실패: '+e.message)}}
+if(!token)msg('접근 토큰이 없습니다. console open 명령이 출력한 URL을 사용하세요.');else{refresh();const page=new URLSearchParams(location.hash.replace(/^#/,'' )).get('page');if(page&&document.getElementById(page)?.classList.contains('section'))show(page);refreshExecution()}
+</script></body></html>

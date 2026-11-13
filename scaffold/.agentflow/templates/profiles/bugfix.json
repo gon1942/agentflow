@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "bugfix",
+  "name": "Bugfix",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "bugfix",
+  "policy": "protected-development",
+  "built_in": false
+}

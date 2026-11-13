@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "id": "development-worker",
+  "name": "Development Worker · 구현·검증·리뷰",
+  "description": "Gate 1 승인된 기존 TASK만 IMPLEMENT → VERIFY → REVIEW. Gate 2와 COMPLETE는 TASK/Coordinator가 별도 관리한다.",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "development-worker",
+  "policy": "protected-development",
+  "built_in": false,
+  "preinstalled": true,
+  "approval_gates": {
+    "GATE1": false,
+    "GATE2": false
+  },
+  "stop_after_stage": "COMPLETE",
+  "enabled_stages": [
+    "IMPLEMENT",
+    "VERIFY",
+    "REVIEW"
+  ],
+  "conditional_stages": {
+    "BUG_FAIL": true,
+    "REVIEW_FIX": true
+  }
+}

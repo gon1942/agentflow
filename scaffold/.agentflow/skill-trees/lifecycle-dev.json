@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "id": "lifecycle-dev",
+  "stages": [
+    {
+      "id": "SESSION",
+      "agent": "coordinator",
+      "skills": []
+    },
+    {
+      "id": "ANALYZE",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "brainstorming",
+          "required": true,
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "id": "PLAN",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "writing-plans",
+          "required": true,
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "id": "GATE1",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "IMPLEMENT",
+      "agent": "implementer",
+      "skills": [
+        {
+          "name": "test-driven-development",
+          "required": true,
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "id": "BUG_FAIL",
+      "agent": "current_worker",
+      "skills": [
+        {
+          "name": "systematic-debugging",
+          "required": true,
+          "condition": "on_failure"
+        }
+      ]
+    },
+    {
+      "id": "VERIFY",
+      "agent": "verifier",
+      "skills": [
+        {
+          "name": "verification-before-completion",
+          "required": true,
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "id": "REVIEW",
+      "agent": "reviewer",
+      "skills": [
+        {
+          "name": "requesting-code-review",
+          "required": true,
+          "condition": "always"
+        }
+      ]
+    },
+    {
+      "id": "REVIEW_FIX",
+      "agent": "implementer",
+      "skills": [
+        {
+          "name": "receiving-code-review",
+          "required": true,
+          "condition": "on_review_changes"
+        },
+        {
+          "name": "test-driven-development",
+          "required": true,
+          "condition": "on_review_changes"
+        }
+      ]
+    },
+    {
+      "id": "GATE2",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "COMPLETE",
+      "agent": "coordinator",
+      "skills": []
+    }
+  ]
+}

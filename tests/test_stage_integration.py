@@ -1,4 +1,5 @@
 """Whole-contract release checks. Native agent calls/approvals are explicitly simulated."""
+from test_install import make_arch_fixture
 import hashlib
 import json
 from pathlib import Path
@@ -59,7 +60,7 @@ class StageIntegrationTests(unittest.TestCase):
         self.assertEqual(installer.git_blob_sha1(src.read_bytes()), installer.ORIGINAL_LICENSE_BLOB_SHA1)
         with tempfile.TemporaryDirectory() as td, patch.object(installer,'EXPECTED_SKILLS',skill), patch.object(installer,'EXPECTED_HELPERS',helpers):
             root = Path(td)/'new-project'
-            installer.install(root,ROOT,archive)
+            installer.install(root,ROOT,archive, architect_package=make_arch_fixture())
             license_copy = root/installer.ORIGINAL_LICENSE_REL
             self.assertEqual(license_copy.read_bytes(),src.read_bytes())
             lock=json.loads((root/'.ai-dev/external-skills.lock.json').read_text())
@@ -69,7 +70,7 @@ class StageIntegrationTests(unittest.TestCase):
             other=Path(td)/'should-not-exist'
             with patch.object(installer,'_scaffold_files',return_value=fake):
                 with self.assertRaisesRegex(ValueError,'UPSTREAM_LICENSE_MISSING_OR_TAMPERED'):
-                    installer.install(other,ROOT,archive)
+                    installer.install(other,ROOT,archive, architect_package=make_arch_fixture())
             self.assertFalse(other.exists())
 
     def test_readonly_independent_workers_and_compressed_output_not_proof(self):
@@ -137,7 +138,7 @@ class StageIntegrationTests(unittest.TestCase):
         archive,skill,helpers,_=make_fixture()
         with tempfile.TemporaryDirectory() as td,patch.object(installer,'EXPECTED_SKILLS',skill),patch.object(installer,'EXPECTED_HELPERS',helpers):
             root=Path(td)/'new-project'
-            out=installer.install(root,ROOT,archive)
+            out=installer.install(root,ROOT,archive, architect_package=make_arch_fixture())
             self.assertEqual(out['workflow_cli'],'NONE')
             self.assertTrue((root/'.opencode/plugins/tool-usage-observer.js').exists())
             task=root/'docs/tasks/LOGIN-001';task.mkdir(parents=True)
@@ -164,7 +165,7 @@ class StageIntegrationTests(unittest.TestCase):
             (task/'improvement.md').write_text('IMPROVER_NOT_RUN (native agent unavailable); no automated change\n')
             self.assertIn('IMPROVER_NOT_RUN',(task/'improvement.md').read_text())
             self.assertFalse((root/'teamdev').exists())
-            js=f'import {{readProjectStatus}} from {json.dumps((root/".opencode/plugins/session-status.js").as_uri())}; console.log((await readProjectStatus({json.dumps(str(root))})).summary)'
+            js=f'import {{readProjectStatus}} from {json.dumps((root/".opencode/lib/session-status.js").as_uri())}; console.log((await readProjectStatus({json.dumps(str(root))})).summary)'
             got=subprocess.run(['node','--input-type=module','-e',js],capture_output=True,text=True,timeout=10)
             self.assertEqual(got.returncode,0,got.stderr)
             self.assertIn('완료 1',got.stdout)

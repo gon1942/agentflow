@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "id": "storyboard",
+  "name": "Storyboard · 화면설계 전문가",
+  "description": "기존 화면과 요구사항을 분석하여 화면 목록, 동작, 상태, 예외와 UI/UX 스토리보드 문서를 작성합니다.",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "storyboard",
+  "policy": "protected-development",
+  "built_in": false,
+  "preinstalled": true,
+  "approval_gates": {
+    "GATE1": false,
+    "GATE2": false
+  },
+  "stop_after_stage": "COMPLETE",
+  "enabled_stages": [
+    "ANALYZE",
+    "PLAN",
+    "VERIFY",
+    "COMPLETE"
+  ],
+  "conditional_stages": {
+    "BUG_FAIL": false,
+    "REVIEW_FIX": false
+  }
+}

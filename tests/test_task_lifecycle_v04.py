@@ -7,7 +7,7 @@ import tempfile
 import unittest
 
 ROOT = Path(__file__).resolve().parents[1]
-PLUGIN = ROOT/'scaffold/.opencode/plugins/session-status.js'
+PLUGIN = ROOT/'scaffold/.opencode/lib/session-status.js'
 
 def js(root, statement):
     script = f'import {{readProjectStatus,scanTasks,suggestTaskName}} from {json.dumps(PLUGIN.as_uri())};\nconst root={json.dumps(str(root))};\n'+statement
@@ -76,6 +76,32 @@ class TaskLifecycleTests(unittest.TestCase):
             result=js(root,'console.log(JSON.stringify(await readProjectStatus(root)));')
             self.assertIn('차단 1 / 완료 0',result['summary'])
             self.assertIn('Gate 2',result['next'])
+
+    def test_custom_profile_explicit_gate2_skip_can_archive_with_hashes(self):
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t)
+            task=write_task(root,'completed','UX-001-screen-design','COMPLETED',gate2=True)
+            digest='a'*64
+            progress=(task/'progress.md').read_text()+f'\nprofile: ux-mngr\nconfiguration_sha256: {digest}\n'
+            (task/'progress.md').write_text(progress)
+            approval=(task/'approvals.md').read_text().replace('- 상태: APPROVED\n- 사용자 원문:', '- 상태: SKIPPED_BY_PROFILE_POLICY\n- Profile ID: ux-mngr\n- configuration_sha256: '+digest+'\n- 사용자 원문:')
+            (task/'approvals.md').write_text(approval)
+            status=js(root,'console.log(JSON.stringify(await readProjectStatus(root)));')
+            self.assertIn('완료 1',status['summary'])
+
+    def test_gate2_skip_rejected_for_development_and_tampered_snapshot(self):
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t)
+            task=write_task(root,'completed','AUTH-001-login','COMPLETED',gate2=True)
+            digest='a'*64
+            (task/'progress.md').write_text((task/'progress.md').read_text()+f'\nprofile: development\nconfiguration_sha256: {digest}\n')
+            approval=(task/'approvals.md').read_text().replace('- 상태: APPROVED\n- 사용자 원문:', '- 상태: SKIPPED_BY_PROFILE_POLICY\n- Profile ID: development\n- configuration_sha256: '+digest+'\n- 사용자 원문:')
+            (task/'approvals.md').write_text(approval)
+            status=js(root,'console.log(JSON.stringify(await readProjectStatus(root)));')
+            self.assertIn('차단 1',status['summary'])
+            (task/'approvals.md').write_text(approval.replace('development','ux-mngr'))
+            status=js(root,'console.log(JSON.stringify(await readProjectStatus(root)));')
+            self.assertIn('차단 1',status['summary'])
 
     def test_misfiled_active_completed_is_blocked(self):
         with tempfile.TemporaryDirectory() as t:

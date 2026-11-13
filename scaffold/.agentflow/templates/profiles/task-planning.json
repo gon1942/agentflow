@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "id": "task-planning",
+  "name": "Task Planning · 작업 계획 전문가",
+  "description": "요구사항·스토리보드·코드 근거에서 AC, 의존성, 검증 계획과 실행 가능한 TASK 계획 파일을 작성합니다.",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "task-planning",
+  "policy": "protected-development",
+  "built_in": false,
+  "preinstalled": false,
+  "approval_gates": {
+    "GATE1": true,
+    "GATE2": true
+  }
+}

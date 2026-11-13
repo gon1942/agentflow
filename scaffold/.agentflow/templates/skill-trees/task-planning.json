@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "id": "task-planning",
+  "stages": [
+    {
+      "id": "SESSION",
+      "agent": "coordinator",
+      "skills": []
+    },
+    {
+      "id": "ANALYZE",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "brainstorming",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "REQUIREMENTS",
+        "STORYBOARD_TRACEABILITY",
+        "CODEBASE_IMPACT"
+      ]
+    },
+    {
+      "id": "PLAN",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "writing-plans",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "AC_DEFINITION",
+        "TASK_DEPENDENCIES"
+      ]
+    },
+    {
+      "id": "GATE1",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "IMPLEMENT",
+      "agent": "implementer",
+      "skills": [
+        {
+          "name": "writing-plans",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "TASK_BREAKDOWN",
+        "EXECUTION_PLAN",
+        "VERIFICATION_PLAN"
+      ]
+    },
+    {
+      "id": "BUG_FAIL",
+      "agent": "current_worker",
+      "skills": []
+    },
+    {
+      "id": "VERIFY",
+      "agent": "verifier",
+      "skills": [
+        {
+          "name": "verification-before-completion",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "PLAN_SCHEMA_CHECK",
+        "DEPENDENCY_CHECK"
+      ]
+    },
+    {
+      "id": "REVIEW",
+      "agent": "reviewer",
+      "skills": [],
+      "activities": [
+        "FEASIBILITY_REVIEW",
+        "SCOPE_REVIEW"
+      ]
+    },
+    {
+      "id": "REVIEW_FIX",
+      "agent": "implementer",
+      "skills": []
+    },
+    {
+      "id": "GATE2",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "COMPLETE",
+      "agent": "coordinator",
+      "skills": []
+    }
+  ]
+}

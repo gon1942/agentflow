@@ -31,6 +31,14 @@ def make_fixture():
     return data.getvalue(), hashes, helper_hashes, fake
 
 
+def make_arch_fixture():
+    """Synthetic in-memory test package; NEVER shipped as original third-party skills."""
+    import architect_sources as arch
+    files={name+'/SKILL.md':f'---\nname: {name}\n---\nTEST ONLY\n'.encode() for name in arch.SKILLS}
+    sources={key:{'repo':cfg['repo'],'commit':cfg['commit'],'license_status':'TEST_FIXTURE'} for key,cfg in arch.REPOS.items()}
+    return {'files':files,'licenses':{},'sources':sources}
+
+
 def gate2_approval(task, marker='SIMULATED_OFFLINE_APPROVAL'):
     # Synthetic fixture ONLY, not a real person approving a workflow.
     import hashlib
@@ -50,8 +58,8 @@ class InstallerTests(unittest.TestCase):
         blob, fake_hashes, helper_hashes, expected_files = make_fixture()
         with tempfile.TemporaryDirectory() as temp, patch.object(installer,'EXPECTED_SKILLS',fake_hashes), patch.object(installer,'EXPECTED_HELPERS',helper_hashes):
             root = Path(temp)/'project'
-            report = installer.install(root,ROOT,blob)
-            self.assertEqual(report['skills'],7)
+            report = installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
+            self.assertEqual(report['skills'],15)
             self.assertEqual(report['runtimes'],3)
             self.assertEqual(report['workflow_cli'],'NONE')
             self.assertEqual(report['native_skill_load'],'NOT_VERIFIED')
@@ -70,7 +78,7 @@ class InstallerTests(unittest.TestCase):
             self.assertEqual((root/'docs/workflow/SESSION-START.md').is_file(),True)
             self.assertFalse(any((root/p).exists() for p in ('.ai-dev/venv','.ai-dev/tools/rtk','teamdev')))
             # Re-running with exact same files is idempotent.
-            rerun = installer.install(root,ROOT,blob)
+            rerun = installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
             self.assertEqual(rerun['written_files'],0)
 
     def test_modified_existing_user_file_refuses_all_writes(self):
@@ -80,7 +88,7 @@ class InstallerTests(unittest.TestCase):
             root.mkdir()
             (root/'AGENTS.md').write_text('USER CONFIG')
             with self.assertRaisesRegex(ValueError,'CONFLICT'):
-                installer.install(root,ROOT,blob)
+                installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
             self.assertEqual((root/'AGENTS.md').read_text(),'USER CONFIG')
             self.assertFalse((root/'.ai-dev').exists())
 
@@ -89,7 +97,7 @@ class InstallerTests(unittest.TestCase):
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)/'project'
             with self.assertRaisesRegex(ValueError,'UPSTREAM_HASH_MISMATCH'):
-                installer.install(root,ROOT,blob)
+                installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
             self.assertFalse(root.exists())
 
     def test_missing_helper_blocks(self):
@@ -110,7 +118,7 @@ class InstallerTests(unittest.TestCase):
             root.mkdir()
             (root/'.opencode').symlink_to(Path(temp),target_is_directory=True)
             with self.assertRaisesRegex(ValueError,'SYMLINK'):
-                installer.install(root,ROOT,blob)
+                installer.install(root,ROOT,blob, architect_package=make_arch_fixture())
             self.assertFalse((root/'AGENTS.md').exists())
         data=io.BytesIO()
         with zipfile.ZipFile(data,'w') as z:
@@ -128,13 +136,14 @@ class InstallerTests(unittest.TestCase):
 
     def test_project_no_teamdev_dependencies_in_agent_runtime(self):
         for path in (ROOT/'scaffold').rglob('*'):
-            if not path.is_file():continue
+            if not path.is_file() or '__pycache__' in path.parts or path.suffix in ('.pyc','.pyo'):continue
             text=path.read_text()
             self.assertNotIn('./teamdev ',text,f'{path} refers to workflow CLI')
         self.assertFalse((ROOT/'scaffold/teamdev').exists())
 
     def test_node_plugin_shows_session_status(self):
         source=ROOT/'scaffold/.opencode/plugins/session-status.js'
+        helper=ROOT/'scaffold/.opencode/lib/session-status.js'
         with tempfile.TemporaryDirectory() as temp:
             root=Path(temp)
             for task,status in [('LOGIN-001','VERIFY'),('CALC-002','WAITING_PLAN_APPROVAL'),('CALC-003','COMPLETED'),('BUG-004','BLOCKED'),('APP-005','WAITING_FINAL_APPROVAL')]:
@@ -145,7 +154,8 @@ class InstallerTests(unittest.TestCase):
                     for f in ('spec.md','plan.md','verification.md','review.md'): (folder/f).write_text('synthetic fixture')
                     (folder/'approvals.md').write_text(gate2_approval(folder))
             # Node can import the plugin as ES module from a file:// URL.
-            js=f'''import {{readProjectStatus,AgentFlowSessionStatus}} from {json.dumps(source.as_uri())};
+            js=f'''import {{readProjectStatus}} from {json.dumps(helper.as_uri())};
+             import {{AgentFlowSessionStatus}} from {json.dumps(source.as_uri())};
              const s=await readProjectStatus({json.dumps(str(root))});
              if(!s.summary.includes('진행 1 / 계획 승인 대기 1 / 최종 승인 대기 1 / 차단 1 / 완료 1')) throw new Error(s.summary);
              let message=''; const hook=await AgentFlowSessionStatus({{directory:{json.dumps(str(root))},client:{{tui:{{showToast:async args=>{{message=args.body.message;}}}}}}}});

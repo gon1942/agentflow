@@ -1,0 +1,118 @@
+{
+  "schema_version": 1,
+  "id": "project-architect",
+  "stages": [
+    {
+      "id": "SESSION",
+      "agent": "coordinator",
+      "skills": []
+    },
+    {
+      "id": "ANALYZE",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "af-project-discovery",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "PROJECT_DISCOVERY",
+        "REQUIREMENTS",
+        "CODEBASE",
+        "CONSTRAINTS"
+      ]
+    },
+    {
+      "id": "PLAN",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "af-design-plan",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "DESIGN_DOCUMENT_PLAN",
+        "REVIEW_CRITERIA",
+        "DOCUMENT_DEPENDENCIES"
+      ]
+    },
+    {
+      "id": "GATE1",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "IMPLEMENT",
+      "agent": "implementer",
+      "skills": [
+        {
+          "name": "af-architecture-design",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "REQUIREMENTS_DOCUMENTATION",
+        "ARCHITECTURE",
+        "ADR",
+        "DESIGN"
+      ]
+    },
+    {
+      "id": "BUG_FAIL",
+      "agent": "current_worker",
+      "skills": []
+    },
+    {
+      "id": "VERIFY",
+      "agent": "verifier",
+      "skills": [
+        {
+          "name": "af-design-verification",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "REQUIREMENTS_TRACEABILITY",
+        "ARCHITECTURE_CONSISTENCY",
+        "SOURCE_EVIDENCE"
+      ]
+    },
+    {
+      "id": "REVIEW",
+      "agent": "reviewer",
+      "skills": [
+        {
+          "name": "af-architecture-review",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "INDEPENDENT_ARCHITECTURE_REVIEW",
+        "SECURITY",
+        "TRADEOFFS"
+      ]
+    },
+    {
+      "id": "REVIEW_FIX",
+      "agent": "implementer",
+      "skills": []
+    },
+    {
+      "id": "GATE2",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "COMPLETE",
+      "agent": "coordinator",
+      "skills": []
+    }
+  ]
+}

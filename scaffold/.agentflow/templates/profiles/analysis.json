@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "id": "analysis",
+  "name": "Analysis",
+  "primary_agent": "coordinator",
+  "workflow": "development",
+  "skill_tree": "analysis",
+  "policy": "protected-development",
+  "built_in": false
+}

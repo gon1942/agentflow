@@ -1,0 +1,126 @@
+{
+  "schema_version": 1,
+  "id": "storyboard",
+  "stages": [
+    {
+      "id": "SESSION",
+      "agent": "coordinator",
+      "skills": []
+    },
+    {
+      "id": "ANALYZE",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "brainstorming",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "REQUIREMENTS",
+        "MENU_ANALYSIS"
+      ]
+    },
+    {
+      "id": "PLAN",
+      "agent": "coordinator",
+      "skills": [
+        {
+          "name": "writing-plans",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "UX_DESIGN_PLAN"
+      ]
+    },
+    {
+      "id": "GATE1",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "IMPLEMENT",
+      "agent": "implementer",
+      "skills": [
+        {
+          "name": "test-driven-development",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "UX_DESIGN",
+        "UI_DESIGN",
+        "STORYBOARD"
+      ]
+    },
+    {
+      "id": "BUG_FAIL",
+      "agent": "current_worker",
+      "skills": [
+        {
+          "name": "systematic-debugging",
+          "required": true,
+          "condition": "on_failure"
+        }
+      ]
+    },
+    {
+      "id": "VERIFY",
+      "agent": "verifier",
+      "skills": [
+        {
+          "name": "verification-before-completion",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "VALIDATION"
+      ]
+    },
+    {
+      "id": "REVIEW",
+      "agent": "reviewer",
+      "skills": [
+        {
+          "name": "requesting-code-review",
+          "required": true,
+          "condition": "always"
+        }
+      ],
+      "activities": [
+        "DESIGN_REVIEW"
+      ]
+    },
+    {
+      "id": "REVIEW_FIX",
+      "agent": "implementer",
+      "skills": [
+        {
+          "name": "receiving-code-review",
+          "required": true,
+          "condition": "on_review_changes"
+        },
+        {
+          "name": "test-driven-development",
+          "required": true,
+          "condition": "on_review_changes"
+        }
+      ]
+    },
+    {
+      "id": "GATE2",
+      "agent": "user",
+      "skills": []
+    },
+    {
+      "id": "COMPLETE",
+      "agent": "coordinator",
+      "skills": []
+    }
+  ]
+}
